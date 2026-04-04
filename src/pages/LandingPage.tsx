@@ -2,19 +2,17 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
-import SplashScreen from "@/components/SplashScreen";
-import OnboardingSlides from "@/components/OnboardingSlides";
+import OnboardingFlow from "@/components/OnboardingFlow";
 import AuthSection from "@/components/AuthSection";
 
-type Step = "splash" | "slides" | "main";
+type Step = "onboarding" | "main";
 
 const LandingPage = () => {
   const { lang } = useI18n();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
-  // Always start from splash on every page load
-  const [step, setStep] = useState<Step>("splash");
+  const [step, setStep] = useState<Step>("onboarding");
 
   useEffect(() => {
     if (!loading && user) {
@@ -22,15 +20,7 @@ const LandingPage = () => {
     }
   }, [user, loading]);
 
-  const onSplashComplete = useCallback(() => {
-    if (user) {
-      setStep("main");
-    } else {
-      setStep("slides");
-    }
-  }, [user]);
-
-  const onSlidesComplete = useCallback(() => {
+  const onOnboardingComplete = useCallback(() => {
     setStep("main");
   }, []);
 
@@ -38,12 +28,8 @@ const LandingPage = () => {
     navigate("/create");
   };
 
-  if (step === "splash") {
-    return <SplashScreen onComplete={onSplashComplete} />;
-  }
-
-  if (step === "slides") {
-    return <OnboardingSlides onComplete={onSlidesComplete} />;
+  if (step === "onboarding" && !user) {
+    return <OnboardingFlow onComplete={onOnboardingComplete} />;
   }
 
   // Main: Hero title + Auth or Welcome
