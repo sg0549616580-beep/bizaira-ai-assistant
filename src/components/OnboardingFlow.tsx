@@ -18,24 +18,24 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   const [goal, setGoal] = useState("");
 
   const businessTypes = isHe
-    ? ["אופנה 👗", "אוכל 🍽️", "יופי וטיפוח 💄", "נדל״ן 🏠", "דיגיטל 💻", "שירותים 🔧", "בריאות 🏥", "חינוך 📚", "אחר ✨"]
-    : ["Fashion 👗", "Food 🍽️", "Beauty 💄", "Real Estate 🏠", "Digital 💻", "Services 🔧", "Health 🏥", "Education 📚", "Other ✨"];
+    ? ["אופנה", "אוכל", "יופי וטיפוח", "נדל״ן", "דיגיטל", "שירותים", "בריאות", "חינוך", "אחר"]
+    : ["Fashion", "Food", "Beauty", "Real Estate", "Digital", "Services", "Health", "Education", "Other"];
 
   const audiences = isHe
-    ? ["בני נוער 🧑‍🎤", "מבוגרים 👨‍💼", "נשים 👩", "גברים 👨", "עסקים (B2B) 🏢", "הורים 👪", "קהל כללי 🌍"]
-    : ["Teens 🧑‍🎤", "Adults 👨‍💼", "Women 👩", "Men 👨", "Businesses (B2B) 🏢", "Parents 👪", "General 🌍"];
+    ? ["בני נוער", "מבוגרים", "נשים", "גברים", "עסקים (B2B)", "הורים", "קהל כללי"]
+    : ["Teens", "Adults", "Women", "Men", "Businesses (B2B)", "Parents", "General"];
 
   const goals = isHe
-    ? ["יותר מכירות 💰", "יותר חשיפה 📣", "תוכן לרשתות 📱", "מיתוג מקצועי 🎨", "חיסכון בזמן ⏱️", "גיוס לקוחות 🎯"]
-    : ["More Sales 💰", "More Exposure 📣", "Social Content 📱", "Professional Branding 🎨", "Save Time ⏱️", "Attract Clients 🎯"];
+    ? ["יותר מכירות", "יותר חשיפה", "תוכן לרשתות", "מיתוג מקצועי", "חיסכון בזמן", "גיוס לקוחות"]
+    : ["More Sales", "More Exposure", "Social Content", "Professional Branding", "Save Time", "Attract Clients"];
 
   const businessInfoText = isHe
-    ? `מעולה! בתחום ה${businessType.replace(/\s*[^\w\sא-ת].*/g, "")} — נתאים לך תוכן שיווקי מדויק, תמונות מוצר מרהיבות, וניסוחים שמדברים בשפה של הלקוחות שלך. 🎯`
-    : `Awesome! In the ${businessType.replace(/\s*[^\w\s].*/g, "")} space — we'll tailor marketing content, stunning product photos, and copy that speaks your customers' language. 🎯`;
+    ? `מעולה! בתחום ה${businessType} — נתאים לך תוכן שיווקי מדויק, תמונות מוצר מרהיבות, וניסוחים שמדברים בשפה של הלקוחות שלך.`
+    : `Awesome! In the ${businessType} space — we'll tailor marketing content, stunning product photos, and copy that speaks your customers' language.`;
 
   const audienceInfoText = isHe
-    ? `מצוין! נתאים את הסגנון, הטון והשפה כדי לפנות בדיוק ל${audience.replace(/\s*[^\w\sא-ת].*/g, "")} — תוכן שמושך, מדבר ומניע לפעולה. 🚀`
-    : `Perfect! We'll match the style, tone, and language to reach ${audience.replace(/\s*[^\w\s].*/g, "")} — content that attracts, speaks, and drives action. 🚀`;
+    ? `מצוין! נתאים את הסגנון, הטון והשפה כדי לפנות בדיוק ל${audience} — תוכן שמושך, מדבר ומניע לפעולה.`
+    : `Perfect! We'll match the style, tone, and language to reach ${audience} — content that attracts, speaks, and drives action.`;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background px-5" dir={isHe ? "rtl" : "ltr"}>
@@ -51,20 +51,23 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
               />
               <img src="/images/bizaira-illustration.png" alt="BizAIra" className="relative w-28 h-28 object-contain" />
             </div>
-            <h1 className="text-3xl font-black text-foreground mb-3">
-              {isHe ? "היי! 👋 טוב שבאת" : "Hey! 👋 Glad you're here"}
+            <h1 className="text-3xl font-black text-foreground mb-2">
+              {isHe ? "היי! איזה כיף שהגעת" : "Hey! So glad you're here"}
             </h1>
+            <p className="text-lg font-semibold text-foreground mb-1">
+              {isHe ? "עוד רגע מתחילים" : "We're about to begin"}
+            </p>
             <p className="text-base text-muted-foreground mb-8 leading-relaxed">
               {isHe
-                ? "לפני שמתחילים, נשאל אותך 3 שאלות קצרות כדי להתאים הכל בדיוק בשבילך."
-                : "Before we start, we'll ask 3 quick questions to tailor everything just for you."}
+                ? "רק 3 שאלות קצרות שיעזרו לנו להתאים לך חוויה מדויקת לעסק שלך — ככה שהכל יהיה פשוט, מהיר ובדיוק בשבילך."
+                : "Just 3 quick questions to tailor the perfect experience for your business — so everything is simple, fast, and made just for you."}
             </p>
             <button
               onClick={() => setStep("business")}
               className="w-full py-4 rounded-2xl font-bold text-lg gradient-glow text-primary-foreground glow-shadow hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
             >
               <Sparkles size={18} />
-              {isHe ? "יאללה, בואו נתחיל!" : "Let's go!"}
+              {isHe ? "מוכנים? בואו נתחיל" : "Ready? Let's go!"}
             </button>
           </div>
         )}
@@ -101,7 +104,6 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         {/* Business info screen */}
         {step === "business-info" && (
           <div className="animate-fade-in text-center">
-            <div className="text-5xl mb-5">🎯</div>
             <h2 className="text-xl font-bold text-foreground mb-3">
               {isHe ? "נהדר, הבנו!" : "Got it!"}
             </h2>
@@ -152,7 +154,6 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         {/* Audience info screen */}
         {step === "audience-info" && (
           <div className="animate-fade-in text-center">
-            <div className="text-5xl mb-5">🚀</div>
             <h2 className="text-xl font-bold text-foreground mb-3">
               {isHe ? "מעולה!" : "Excellent!"}
             </h2>
@@ -207,12 +208,12 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
               <Check size={28} className="text-primary-foreground" />
             </div>
             <h2 className="text-2xl font-black text-foreground mb-3">
-              {isHe ? "הכל מוכן! 🎉" : "All Set! 🎉"}
+              {isHe ? "הכל מוכן!" : "All Set!"}
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-8 text-sm">
               {isHe
-                ? "התאמנו הכל בדיוק בשבילך — תוכן חכם, מדויק ומותאם לעסק שלך. בלי סיבוכים, בלי המתנה. פשוט מתחילים. 🚀"
-                : "Everything's tailored just for you — smart, precise content made for your business. No complications, no waiting. Let's go! 🚀"}
+                ? "התאמנו הכל בדיוק בשבילך — תוכן חכם, מדויק ומותאם לעסק שלך. בלי סיבוכים, בלי המתנה. פשוט מתחילים."
+                : "Everything's tailored just for you — smart, precise content made for your business. No complications, no waiting. Let's go!"}
             </p>
             <button
               onClick={onComplete}
