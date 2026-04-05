@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import SparkleIcon from "@/components/SparkleIcon";
 import { useI18n } from "@/lib/i18n";
 import { useSmartMemory } from "@/hooks/useSmartMemory";
+import { saveCreation, trackDownload } from "@/lib/creations-store";
 import {
   ArrowRight, ArrowLeft, TrendingUp, TrendingDown, DollarSign,
   Users, Target, MessageSquare, BarChart3, Lock, Sparkles, Loader2,
@@ -76,6 +77,16 @@ const BusinessAnalyticsPage = () => {
         : `You are a smart business advisor. Answer briefly with reasoning. Data: monthly revenue ${currency}${revenue.toLocaleString()}, expenses ${currency}${expenses.toLocaleString()}, net profit ${currency}${profit.toLocaleString()}, ${clients} new clients.`;
       const answer = await generateText(question, systemPrompt);
       setAiAnswer(answer);
+      if (answer && !answer.startsWith("לא הצלחתי")) {
+        saveCreation({
+          type: "analytics",
+          title: isHe ? "ניתוח עסקי" : "Business Analytics",
+          content: isHe
+            ? `שאלה: ${question}\n\nתשובה:\n${answer}`
+            : `Question: ${question}\n\nAnswer:\n${answer}`,
+          metadata: { revenue, expenses, clients },
+        });
+      }
     } catch {
       setAiAnswer(isHe ? "לא הצלחתי לייצר תשובה. נסה שוב." : "Could not generate answer. Please try again.");
     } finally {
@@ -94,6 +105,7 @@ const BusinessAnalyticsPage = () => {
     a.download = "business-analytics-report.txt";
     a.click();
     URL.revokeObjectURL(url);
+    trackDownload();
   };
 
   const proFeatures = [t("analytics.forecast"), t("analytics.simulations"), t("analytics.multiYear"), t("analytics.breakeven")];

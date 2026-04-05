@@ -4,6 +4,7 @@ import SparkleIcon from "@/components/SparkleIcon";
 import { useI18n } from "@/lib/i18n";
 import { useSmartMemory } from "@/hooks/useSmartMemory";
 import { generateText } from "@/lib/ai-service";
+import { saveCreation, trackDownload } from "@/lib/creations-store";
 import {
   ArrowRight, ArrowLeft, Sparkles, Calendar, Clock, AlertTriangle,
   TrendingUp, Battery, Lock, Loader2, Zap, Download, FileText, Trophy,
@@ -50,6 +51,16 @@ const TimeOptimizerPage = () => {
         : `Build me a balanced week. Data: ${hours} weekly work hours, salary/income ${salaryNum} ₪/month. Services: ${servicesList || "general"}. Give detailed practical recommendations.`;
       const result = await generateText(prompt, systemPrompt);
       setOptimizeResult(result);
+      if (result && !result.startsWith("מומלץ לחלק")) {
+        saveCreation({
+          type: "time",
+          title: isHe ? "ניהול זמן שבועי" : "Weekly Time Plan",
+          content: isHe
+            ? `שעות עבודה: ${hours}/שבוע | הכנסה: ₪${salaryNum.toLocaleString()}\n\n${result}`
+            : `Work hours: ${hours}/week | Income: ₪${salaryNum.toLocaleString()}\n\n${result}`,
+          metadata: { hours, salary: salaryNum, burnout },
+        });
+      }
     } catch {
       setOptimizeResult(isHe ? "מומלץ לחלק את השבוע ל-3 ימים עמוסים ו-2 ימים קלים." : "Recommended: split into 3 heavy days and 2 light days.");
     } finally {
@@ -68,6 +79,7 @@ const TimeOptimizerPage = () => {
     a.download = "time-optimizer-report.txt";
     a.click();
     URL.revokeObjectURL(url);
+    trackDownload();
   };
 
   // Format result with highlighted keywords

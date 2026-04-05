@@ -16,6 +16,15 @@ function getOpenAI(): OpenAI {
   throw new Error("No OpenAI credentials configured");
 }
 
+const QUALITY_SYSTEM_SUFFIX = `
+Output requirements:
+- Be specific, detailed, and professional
+- Avoid generic filler phrases
+- Each response must be immediately actionable and ready to use
+- Match the exact tone, language, and context requested
+- Never include meta-commentary, disclaimers, or explanations about the output
+`;
+
 router.post("/generate-text", async (req, res) => {
   try {
     const { prompt, systemPrompt } = req.body;
@@ -25,19 +34,26 @@ router.post("/generate-text", async (req, res) => {
     }
 
     const openai = getOpenAI();
-    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [];
-    if (systemPrompt) {
-      messages.push({ role: "system", content: systemPrompt });
-    }
-    messages.push({ role: "user", content: prompt });
+
+    const enhancedSystem = systemPrompt
+      ? `${systemPrompt}\n\n${QUALITY_SYSTEM_SUFFIX}`
+      : `You are an expert AI assistant for small business owners. Provide precise, professional, high-quality output.\n\n${QUALITY_SYSTEM_SUFFIX}`;
+
+    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+      { role: "system", content: enhancedSystem },
+      { role: "user", content: prompt },
+    ];
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages,
-      max_tokens: 1500,
+      max_tokens: 2000,
+      temperature: 0.75,
+      presence_penalty: 0.1,
+      frequency_penalty: 0.1,
     });
 
-    const text = completion.choices[0]?.message?.content || "";
+    const text = completion.choices[0]?.message?.content?.trim() || "";
     res.json({ text });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Text generation failed";
@@ -47,7 +63,7 @@ router.post("/generate-text", async (req, res) => {
 
 router.post("/generate-image", async (req, res) => {
   try {
-    const { prompt, editImage } = req.body;
+    const { prompt } = req.body;
     if (!prompt) {
       res.status(400).json({ error: "prompt is required" });
       return;
@@ -55,11 +71,16 @@ router.post("/generate-image", async (req, res) => {
 
     const openai = getOpenAI();
 
+    // Enhance the prompt for maximum quality
+    const enhancedPrompt = `${prompt}. Ultra-high quality, professional photography, sharp details, perfect lighting, commercial grade.`;
+
     const response = await openai.images.generate({
       model: "dall-e-3",
-      prompt,
+      prompt: enhancedPrompt,
       n: 1,
       size: "1024x1024",
+      quality: "hd",
+      style: "vivid",
       response_format: "url",
     });
 

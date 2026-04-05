@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
 import { generateText } from "@/lib/ai-service";
 import SparkleIcon from "@/components/SparkleIcon";
+import { saveCreation, trackDownload } from "@/lib/creations-store";
 import {
   ArrowRight, ArrowLeft, Sparkles, Loader2,
   Copy, Check, RefreshCw, Minimize2, Heart, Layers, Download,
@@ -67,6 +68,19 @@ const AIMessagesPage = () => {
 
       const text = await generateText(prompt, systemPrompt);
       setResult(text);
+      // Auto-save to personal archive
+      if (text && !text.startsWith("שגיאה") && !text.startsWith("Failed")) {
+        const purposeHe: Record<string, string> = {
+          sale: "הודעת מכירה", service: "הודעת שירות", reminder: "תזכורת",
+          post: "פוסט לרשתות", collection: "תזכורת תשלום", launch: "הודעת השקה",
+        };
+        saveCreation({
+          type: "message",
+          title: isHe ? purposeHe[purpose] || "הודעה" : purpose,
+          content: text,
+          metadata: { purpose, tone, audience },
+        });
+      }
     } catch (err) {
       console.error("Generation failed:", err);
       setResult(isHe ? "שגיאה ביצירת ההודעה. נסה שוב." : "Failed to generate. Please try again.");
@@ -89,6 +103,7 @@ const AIMessagesPage = () => {
     a.download = `bizaira-message.txt`;
     a.click();
     URL.revokeObjectURL(url);
+    trackDownload();
   };
 
   return (

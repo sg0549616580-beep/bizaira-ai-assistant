@@ -4,6 +4,7 @@ import SparkleIcon from "@/components/SparkleIcon";
 import { useI18n } from "@/lib/i18n";
 import { useSmartMemory } from "@/hooks/useSmartMemory";
 import { generateText } from "@/lib/ai-service";
+import { saveCreation, trackDownload } from "@/lib/creations-store";
 import {
   ArrowRight, ArrowLeft, Sparkles, DollarSign, Clock, TrendingUp,
   AlertTriangle, Lock, Calculator, Loader2, Zap, Package, Download, Trophy,
@@ -50,6 +51,16 @@ const PricingStrategistPage = () => {
         : `Data: price ₪${recommendedPrice}, ${duration}min, materials ₪${material}, fixed ₪${fixed}/mo. What if +10%? -15%? Give 3 recommendations.`;
       const result = await generateText(prompt, systemPrompt);
       setSimResult(result);
+      if (result && !result.startsWith("העלאת")) {
+        saveCreation({
+          type: "pricing",
+          title: isHe ? "אסטרטגיית תמחור" : "Pricing Strategy",
+          content: isHe
+            ? `מחיר מומלץ: ₪${recommendedPrice}\n\nסימולציה:\n${result}`
+            : `Recommended Price: ₪${recommendedPrice}\n\nSimulation:\n${result}`,
+          metadata: { recommendedPrice, duration, material },
+        });
+      }
     } catch {
       setSimResult(isHe ? "העלאת מחיר ב-10% מומלצת. הורדה ב-15% לא כדאית." : "10% increase recommended. 15% decrease not advisable.");
     } finally {
@@ -68,6 +79,7 @@ const PricingStrategistPage = () => {
     a.download = "pricing-report.txt";
     a.click();
     URL.revokeObjectURL(url);
+    trackDownload();
   };
 
   return (
