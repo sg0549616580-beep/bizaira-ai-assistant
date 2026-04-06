@@ -2,15 +2,20 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   Wand2, CreditCard, HeadphonesIcon, Calendar, TrendingUp,
-  ChevronRight, ChevronLeft, Sparkles, Download, PenTool,
+  Sparkles, Download, PenTool,
   Archive, MessageSquare, BarChart3, DollarSign, Clock, Camera,
-  Trash2, Copy, Check, BookOpen,
+  Trash2, Copy, Check, ChevronRight, ChevronLeft,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  loadCreations, deleteCreation, trackDownload, type Creation, type CreationType,
+  loadCreations, deleteCreation, trackDownload,
+  type Creation, type CreationType,
 } from "@/lib/creations-store";
+
+const NAVY   = "hsl(219 65% 17%)";
+const PURPLE = "hsl(252 73% 60%)";
+const PURPLE_LIGHT = "hsl(252 73% 96%)";
 
 const TYPE_ICON: Record<CreationType, React.ComponentType<{ size?: number; strokeWidth?: number; style?: React.CSSProperties }>> = {
   message:   MessageSquare,
@@ -22,9 +27,9 @@ const TYPE_ICON: Record<CreationType, React.ComponentType<{ size?: number; strok
 };
 
 const STORAGE_KEYS = {
-  firstUseDate: "bizaira_first_credit_use",
-  creationsCount: "bizaira_creations_count",
-  downloadsCount: "bizaira_downloads_count",
+  firstUseDate:    "bizaira_first_credit_use",
+  creationsCount:  "bizaira_creations_count",
+  downloadsCount:  "bizaira_downloads_count",
 };
 
 const DashboardPage = () => {
@@ -32,53 +37,49 @@ const DashboardPage = () => {
   const { user, profile } = useAuth();
   const isHe = lang === "he";
 
-  const userName = user?.user_metadata?.full_name || (isHe ? "אורח" : "Guest");
+  const userName    = user?.user_metadata?.full_name || (isHe ? "אורח" : "Guest");
   const creditsUsed = profile?.credits_used ?? 0;
   const creditsTotal = profile?.credits_total ?? 5;
-  const creditsLeft = creditsTotal - creditsUsed;
-  const creditPct = creditsTotal > 0 ? Math.round((creditsLeft / creditsTotal) * 100) : 0;
+  const creditsLeft  = creditsTotal - creditsUsed;
+  const creditPct    = creditsTotal > 0 ? Math.round((creditsLeft / creditsTotal) * 100) : 0;
 
-  const [firstUseDate, setFirstUseDate] = useState<string | null>(null);
+  const [firstUseDate, setFirstUseDate]     = useState<string | null>(null);
   const [creationsCount, setCreationsCount] = useState(0);
   const [downloadsCount, setDownloadsCount] = useState(0);
-  const [creations, setCreations] = useState<Creation[]>([]);
-  const [activeTab, setActiveTab] = useState<"overview" | "archive">("overview");
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [creations, setCreations]           = useState<Creation[]>([]);
+  const [activeTab, setActiveTab]           = useState<"overview" | "archive">("overview");
+  const [copiedId, setCopiedId]             = useState<string | null>(null);
 
   const refreshData = useCallback(() => {
-    const storedFirstUse = localStorage.getItem(STORAGE_KEYS.firstUseDate);
-    const storedCreations = localStorage.getItem(STORAGE_KEYS.creationsCount);
-    const storedDownloads = localStorage.getItem(STORAGE_KEYS.downloadsCount);
-    if (storedFirstUse) setFirstUseDate(storedFirstUse);
-    if (storedCreations) setCreationsCount(parseInt(storedCreations, 10) || 0);
-    if (storedDownloads) setDownloadsCount(parseInt(storedDownloads, 10) || 0);
+    const s1 = localStorage.getItem(STORAGE_KEYS.firstUseDate);
+    const s2 = localStorage.getItem(STORAGE_KEYS.creationsCount);
+    const s3 = localStorage.getItem(STORAGE_KEYS.downloadsCount);
+    if (s1) setFirstUseDate(s1);
+    if (s2) setCreationsCount(parseInt(s2, 10) || 0);
+    if (s3) setDownloadsCount(parseInt(s3, 10) || 0);
     setCreations(loadCreations());
   }, []);
 
   useEffect(() => {
     refreshData();
-    const handler = () => refreshData();
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
+    window.addEventListener("storage", refreshData);
+    return () => window.removeEventListener("storage", refreshData);
   }, [refreshData]);
 
   const getNextRenewalDate = () => {
     if (!firstUseDate) return isHe ? "טרם נעשה שימוש" : "No usage yet";
-    const first = new Date(firstUseDate);
-    const next = new Date(first);
+    const next = new Date(firstUseDate);
     next.setMonth(next.getMonth() + 1);
     return next.toLocaleDateString(isHe ? "he-IL" : "en-US");
   };
 
   const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString(isHe ? "he-IL" : "en-US", {
-      day: "numeric", month: "short",
-    });
+    new Date(iso).toLocaleDateString(isHe ? "he-IL" : "en-US", { day: "numeric", month: "short" });
 
-  const formatFirstUseDate = () => {
-    if (!firstUseDate) return isHe ? "טרם נעשה שימוש" : "No usage yet";
-    return new Date(firstUseDate).toLocaleDateString(isHe ? "he-IL" : "en-US");
-  };
+  const formatFirstUseDate = () =>
+    firstUseDate
+      ? new Date(firstUseDate).toLocaleDateString(isHe ? "he-IL" : "en-US")
+      : (isHe ? "טרם נעשה שימוש" : "No usage yet");
 
   const Arrow = isHe ? ChevronLeft : ChevronRight;
 
@@ -90,8 +91,8 @@ const DashboardPage = () => {
 
   const handleDownloadCreation = (c: Creation) => {
     const blob = new Blob([c.content], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
     a.href = url;
     a.download = `bizaira-${c.type}-${c.id.slice(0, 6)}.txt`;
     a.click();
@@ -106,9 +107,9 @@ const DashboardPage = () => {
   };
 
   const quickActions = [
-    { to: "/create", icon: Wand2, label: t("dash.startCreate") },
-    { to: "/pricing", icon: CreditCard, label: t("dash.manageSub") },
-    { to: "/support", icon: HeadphonesIcon, label: t("dash.supportTitle") },
+    { to: "/create",   icon: Wand2,          label: t("dash.startCreate")   },
+    { to: "/pricing",  icon: CreditCard,      label: t("dash.manageSub")     },
+    { to: "/support",  icon: HeadphonesIcon,  label: t("dash.supportTitle")  },
   ];
 
   const typeLabel = (type: CreationType) => {
@@ -116,7 +117,7 @@ const DashboardPage = () => {
       message:   { he: "הודעה",         en: "Message"   },
       analytics: { he: "ניתוח עסקי",   en: "Analytics" },
       pricing:   { he: "תמחור",         en: "Pricing"   },
-      time:      { he: "ניהול זמן",     en: "Time Mgmt" },
+      time:      { he: "ניהול זמן",     en: "Time"      },
       image:     { he: "תמונה",         en: "Image"     },
       photo:     { he: "סטודיו",        en: "Photo"     },
     };
@@ -124,30 +125,31 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="pb-6 max-w-lg mx-auto" dir={isHe ? "rtl" : "ltr"}>
+    <div className="pb-8 max-w-lg mx-auto" dir={isHe ? "rtl" : "ltr"}>
+
       {/* Header */}
       <div className="px-5 pt-8 mb-6 animate-float-up">
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest mb-1">
-          {isHe ? "שלום" : "Hello"}
+        <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
+          {isHe ? "שלום," : "Hello,"}
         </p>
-        <h1 className="text-2xl font-bold text-foreground tracking-tight">{userName}</h1>
+        <h1 className="text-2xl font-black" style={{ color: NAVY }}>{userName}</h1>
       </div>
 
       {/* Tabs */}
       <div className="px-5 mb-5 animate-float-up" style={{ animationDelay: "40ms" }}>
         <div className="flex gap-1 p-1 bg-muted rounded-xl">
           {[
-            { key: "overview", he: "סקירה", en: "Overview" },
+            { key: "overview", he: "סקירה",                                        en: "Overview"          },
             { key: "archive",  he: `ארכיון (${creations.length})`, en: `Archive (${creations.length})` },
           ].map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as "overview" | "archive")}
-              className="flex-1 py-2 text-xs font-semibold rounded-lg transition-all duration-200"
+              className="flex-1 py-2 text-xs font-bold rounded-lg transition-all duration-200"
               style={{
-                background: activeTab === tab.key ? "hsl(0 0% 100%)" : "transparent",
-                color: activeTab === tab.key ? "hsl(210 100% 12%)" : "hsl(0 0% 44%)",
-                boxShadow: activeTab === tab.key ? "0 1px 4px hsl(0 0% 0% / 0.08)" : "none",
+                background:  activeTab === tab.key ? "#fff"                        : "transparent",
+                color:       activeTab === tab.key ? NAVY                          : "hsl(220 12% 50%)",
+                boxShadow:   activeTab === tab.key ? "0 1px 4px hsl(0 0% 0% / 0.07)" : "none",
               }}
             >
               {isHe ? tab.he : tab.en}
@@ -156,97 +158,103 @@ const DashboardPage = () => {
         </div>
       </div>
 
+      {/* ─── Overview tab ─── */}
       {activeTab === "overview" && (
-        <div className="px-5 space-y-5">
+        <div className="px-5 space-y-4">
+
           {/* Credits card */}
           <div className="glass-card rounded-2xl p-5 space-y-4 animate-float-up" style={{ animationDelay: "60ms" }}>
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-xs text-muted-foreground mb-0.5">{t("dash.plan")}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-1">
+                  {t("dash.plan")}
+                </p>
                 <div className="flex items-center gap-1.5">
-                  <Sparkles size={13} className="text-primary" strokeWidth={1.5} />
-                  <span className="text-sm font-bold text-foreground">Free</span>
+                  <Sparkles size={13} strokeWidth={1.5} style={{ color: PURPLE }} />
+                  <span className="text-sm font-bold" style={{ color: NAVY }}>Free</span>
                 </div>
               </div>
               <Link
                 to="/pricing"
-                className="gradient-glow glow-shadow text-white text-xs font-semibold px-4 py-2 rounded-xl hover:scale-105 transition-transform"
-                style={{ color: "hsl(39 48% 90%)" }}
+                className="gradient-glow glow-shadow text-white text-xs font-bold px-4 py-2 rounded-xl hover:scale-105 transition-transform"
               >
                 {t("dash.upgrade")}
               </Link>
             </div>
+
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">{t("dash.credits")}</span>
-                <span className="font-semibold text-foreground">{creditsLeft} / {creditsTotal}</span>
+                <span className="font-bold" style={{ color: NAVY }}>{creditsLeft} / {creditsTotal}</span>
               </div>
-              <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full gradient-glow rounded-full transition-all duration-700" style={{ width: `${creditPct}%` }} />
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-700"
+                  style={{
+                    width: `${creditPct}%`,
+                    background: `linear-gradient(90deg, ${PURPLE}, hsl(252 73% 50%))`,
+                  }}
+                />
               </div>
               <p className="text-[11px] text-muted-foreground">
                 {creditPct}% {isHe ? "קרדיטים נותרים" : "credits remaining"}
               </p>
             </div>
-            <div className="pt-3 border-t border-gray-100 space-y-2">
+
+            <div className="pt-3 border-t border-border space-y-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground flex items-center gap-1.5">
-                  <Calendar size={11} strokeWidth={1.5} />
+                  <Calendar size={11} />
                   {isHe ? "שימוש ראשון:" : "First Use:"}
                 </span>
-                <span className="font-medium text-foreground">{formatFirstUseDate()}</span>
+                <span className="font-semibold" style={{ color: NAVY }}>{formatFirstUseDate()}</span>
               </div>
               <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground flex items-center gap-1.5">
-                  <Calendar size={11} strokeWidth={1.5} />
+                  <Calendar size={11} />
                   {isHe ? "חידוש הבא:" : "Next Renewal:"}
                 </span>
-                <span className="font-medium text-foreground">{getNextRenewalDate()}</span>
+                <span className="font-semibold" style={{ color: NAVY }}>{getNextRenewalDate()}</span>
               </div>
             </div>
           </div>
 
-          {/* Activity Stats */}
-          <div className="glass-card rounded-2xl p-5 animate-float-up" style={{ animationDelay: "120ms" }}>
+          {/* Activity stats */}
+          <div className="glass-card rounded-2xl p-5 animate-float-up" style={{ animationDelay: "100ms" }}>
             <div className="flex items-center gap-2 mb-4">
-              <TrendingUp size={15} strokeWidth={1.5} className="text-primary" />
-              <span className="text-sm font-semibold text-foreground">{t("dash.activity")}</span>
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: PURPLE_LIGHT }}>
+                <TrendingUp size={14} strokeWidth={1.5} style={{ color: PURPLE }} />
+              </div>
+              <span className="text-sm font-bold" style={{ color: NAVY }}>{t("dash.activity")}</span>
             </div>
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground flex items-center gap-2">
-                  <PenTool size={14} strokeWidth={1.5} className="text-muted-foreground" />
-                  {t("dash.creations")}
-                </span>
-                <span className="text-sm font-semibold text-foreground">{creationsCount}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground flex items-center gap-2">
-                  <Download size={14} strokeWidth={1.5} className="text-muted-foreground" />
-                  {t("dash.downloads")}
-                </span>
-                <span className="font-semibold text-foreground text-sm">{downloadsCount}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground flex items-center gap-2">
-                  <Archive size={14} strokeWidth={1.5} className="text-muted-foreground" />
-                  {isHe ? "שמורות בארכיון" : "Saved in archive"}
-                </span>
-                <span className="font-semibold text-foreground text-sm">{creations.length}</span>
-              </div>
+              {[
+                { icon: PenTool,  label: t("dash.creations"),                  val: creationsCount },
+                { icon: Download, label: t("dash.downloads"),                   val: downloadsCount },
+                { icon: Archive,  label: isHe ? "שמורות בארכיון" : "In archive", val: creations.length },
+              ].map(({ icon: Icon, label, val }) => (
+                <div key={label} className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground flex items-center gap-2">
+                    <Icon size={14} strokeWidth={1.5} />
+                    {label}
+                  </span>
+                  <span className="text-sm font-bold" style={{ color: NAVY }}>{val}</span>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Recent creations preview */}
           {creations.length > 0 && (
-            <div className="animate-float-up" style={{ animationDelay: "150ms" }}>
+            <div className="animate-float-up" style={{ animationDelay: "140ms" }}>
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
                   {isHe ? "יצירות אחרונות" : "Recent Creations"}
                 </p>
                 <button
                   onClick={() => setActiveTab("archive")}
-                  className="text-xs text-primary font-semibold"
+                  className="text-xs font-bold"
+                  style={{ color: PURPLE }}
                 >
                   {isHe ? "הצג הכל" : "Show all"}
                 </button>
@@ -256,15 +264,12 @@ const DashboardPage = () => {
                   const IconComp = TYPE_ICON[c.type];
                   return (
                     <div key={c.id} className="glass-card rounded-xl p-3 flex items-start gap-3">
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-                        style={{ background: "hsl(210 100% 12%)" }}
-                      >
-                        <IconComp size={14} strokeWidth={1.5} style={{ color: "hsl(39 48% 56%)" }} />
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ background: PURPLE_LIGHT }}>
+                        <IconComp size={14} strokeWidth={1.5} style={{ color: PURPLE }} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
-                          <span className="text-[10px] font-bold text-primary uppercase tracking-wide">
+                          <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
                             {typeLabel(c.type)}
                           </span>
                           <span className="text-[10px] text-muted-foreground">{formatDate(c.createdAt)}</span>
@@ -279,8 +284,8 @@ const DashboardPage = () => {
           )}
 
           {/* Quick actions */}
-          <div className="animate-float-up" style={{ animationDelay: "180ms" }}>
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+          <div className="animate-float-up" style={{ animationDelay: "175ms" }}>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
               {t("dash.quickActions")}
             </p>
             <div className="grid grid-cols-3 gap-3">
@@ -288,16 +293,15 @@ const DashboardPage = () => {
                 <Link
                   key={to}
                   to={to}
-                  className="flex flex-col items-center justify-center p-4 rounded-2xl hover:scale-[1.03] transition-all duration-200"
-                  style={{
-                    background: "hsl(210 100% 12%)",
-                    boxShadow: "0 4px 20px -4px hsl(210 100% 12% / 0.35), 0 2px 10px -2px hsl(39 48% 56% / 0.15)",
-                  }}
+                  className="glass-card flex flex-col items-center justify-center p-4 rounded-2xl hover:border-accent/40 hover:scale-[1.03] active:scale-[0.99] transition-all duration-200 group"
                 >
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-2" style={{ background: "hsl(210 100% 16%)" }}>
-                    <Icon size={20} strokeWidth={1.5} style={{ color: "hsl(39 48% 56%)" }} />
+                  <div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-2 transition-all duration-200 group-hover:scale-110"
+                    style={{ background: PURPLE_LIGHT }}
+                  >
+                    <Icon size={20} strokeWidth={1.5} style={{ color: PURPLE }} />
                   </div>
-                  <p className="text-xs font-bold text-center leading-tight" style={{ color: "hsl(39 48% 56%)" }}>
+                  <p className="text-xs font-bold text-center leading-tight" style={{ color: NAVY }}>
                     {label}
                   </p>
                 </Link>
@@ -307,14 +311,15 @@ const DashboardPage = () => {
         </div>
       )}
 
+      {/* ─── Archive tab ─── */}
       {activeTab === "archive" && (
         <div className="px-5 space-y-3 animate-fade-in">
           {creations.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center opacity-60">
+            <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="w-16 h-16 rounded-2xl glass-card flex items-center justify-center mb-4">
                 <Archive size={24} className="text-muted-foreground" />
               </div>
-              <p className="text-sm font-bold text-foreground">
+              <p className="text-sm font-bold" style={{ color: NAVY }}>
                 {isHe ? "הארכיון ריק" : "Archive is empty"}
               </p>
               <p className="text-xs text-muted-foreground mt-1 max-w-[220px]">
@@ -324,8 +329,7 @@ const DashboardPage = () => {
               </p>
               <Link
                 to="/create"
-                className="mt-5 gradient-glow text-white text-sm font-bold px-6 py-3 rounded-xl"
-                style={{ color: "hsl(39 48% 90%)" }}
+                className="mt-5 gradient-glow glow-shadow text-white text-sm font-bold px-6 py-3 rounded-xl"
               >
                 {isHe ? "התחל ליצור" : "Start Creating"}
               </Link>
@@ -333,9 +337,7 @@ const DashboardPage = () => {
           ) : (
             <>
               <p className="text-xs text-muted-foreground mb-1">
-                {isHe
-                  ? `${creations.length} יצירות שמורות`
-                  : `${creations.length} saved creations`}
+                {isHe ? `${creations.length} יצירות שמורות` : `${creations.length} saved creations`}
               </p>
               {creations.map(c => {
                 const IconComp = TYPE_ICON[c.type];
@@ -343,24 +345,21 @@ const DashboardPage = () => {
                 return (
                   <div key={c.id} className="glass-card rounded-xl p-4">
                     <div className="flex items-start gap-3 mb-3">
-                      <div
-                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                        style={{ background: "hsl(210 100% 12%)" }}
-                      >
-                        <IconComp size={15} strokeWidth={1.5} style={{ color: "hsl(39 48% 56%)" }} />
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: PURPLE_LIGHT }}>
+                        <IconComp size={15} strokeWidth={1.5} style={{ color: PURPLE }} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[10px] font-bold text-primary uppercase tracking-wide">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
                             {typeLabel(c.type)}
                           </span>
                           <span className="text-[10px] text-muted-foreground">{formatDate(c.createdAt)}</span>
                         </div>
-                        <p className="text-xs font-semibold text-foreground mt-0.5 truncate">{c.title}</p>
+                        <p className="text-xs font-bold mt-0.5 truncate" style={{ color: NAVY }}>{c.title}</p>
                       </div>
                     </div>
 
-                    <div className="bg-background/60 rounded-lg p-3 mb-3 border border-border/30">
+                    <div className="bg-muted rounded-xl p-3 mb-3">
                       <p className="text-xs text-foreground leading-relaxed line-clamp-4 whitespace-pre-wrap">
                         {c.content}
                       </p>
@@ -369,29 +368,29 @@ const DashboardPage = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleCopyCreation(c)}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-semibold transition-all"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] font-bold transition-all"
                         style={{
-                          background: isCopied ? "hsl(142 60% 94%)" : "hsl(0 0% 96%)",
-                          color: isCopied ? "hsl(142 60% 30%)" : "hsl(210 100% 12%)",
+                          background: isCopied ? "hsl(142 70% 94%)" : "hsl(220 18% 95%)",
+                          color:      isCopied ? "hsl(142 60% 30%)" : NAVY,
                         }}
                       >
                         {isCopied
-                          ? <><Check size={12} />{isHe ? "הועתק" : "Copied"}</>
-                          : <><Copy size={12} />{isHe ? "העתק" : "Copy"}</>}
+                          ? <><Check size={11} />{isHe ? "הועתק" : "Copied"}</>
+                          : <><Copy size={11} />{isHe ? "העתק" : "Copy"}</>}
                       </button>
                       <button
                         onClick={() => handleDownloadCreation(c)}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-semibold transition-all"
-                        style={{ background: "hsl(0 0% 96%)", color: "hsl(210 100% 12%)" }}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] font-bold transition-all"
+                        style={{ background: "hsl(220 18% 95%)", color: NAVY }}
                       >
-                        <Download size={12} />{isHe ? "הורד" : "Download"}
+                        <Download size={11} />{isHe ? "הורד" : "Download"}
                       </button>
                       <button
                         onClick={() => handleDeleteCreation(c.id)}
-                        className="px-3 py-2 rounded-lg transition-all"
+                        className="px-3 py-2 rounded-xl transition-all"
                         style={{ background: "hsl(0 84% 97%)", color: "hsl(0 84% 50%)" }}
                       >
-                        <Trash2 size={12} />
+                        <Trash2 size={11} />
                       </button>
                     </div>
                   </div>
