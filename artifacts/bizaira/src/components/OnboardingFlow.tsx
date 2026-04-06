@@ -14,8 +14,8 @@ interface OnboardingFlowProps {
 
 type Step = "greeting" | "business" | "business-info" | "audience" | "audience-info" | "goal" | "done";
 
-const PURPLE = "hsl(252 73% 60%)";
-const NAVY   = "hsl(219 65% 17%)";
+const PURPLE = "#0D2344";
+const NAVY   = "#0D2344";
 
 const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   const { lang } = useI18n();
@@ -183,7 +183,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         {/* ─── Screen 3: Business Info (Outline CTA) ─── */}
         {step === "business-info" && (
           <div className="animate-fade-in text-center">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: "hsl(252 73% 96%)" }}>
+            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: "hsl(216 50% 94%)" }}>
               <Check size={24} style={{ color: PURPLE }} />
             </div>
             <h2 className="text-2xl font-black mb-3" style={{ color: NAVY }}>
@@ -253,7 +253,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         {/* ─── Screen 5: Audience Info (Outline CTA) ─── */}
         {step === "audience-info" && (
           <div className="animate-fade-in text-center">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: "hsl(252 73% 96%)" }}>
+            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: "hsl(216 50% 94%)" }}>
               <Check size={24} style={{ color: PURPLE }} />
             </div>
             <h2 className="text-2xl font-black mb-3" style={{ color: NAVY }}>
@@ -325,7 +325,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
           <div className="animate-fade-in text-center">
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 glow-shadow"
-              style={{ background: `linear-gradient(135deg, ${PURPLE}, hsl(252 73% 48%))` }}
+              style={{ background: `linear-gradient(135deg, ${PURPLE}, hsl(216 68% 14%))` }}
             >
               <Check size={28} className="text-white" strokeWidth={2.5} />
             </div>
@@ -360,7 +360,7 @@ const StepHeader = ({ num, total, title }: { num: number; total: number; title: 
           className="h-1.5 rounded-full flex-1 transition-all duration-500"
           style={{
             background: i < num
-              ? "linear-gradient(90deg, hsl(252 73% 60%), hsl(252 73% 50%))"
+              ? "linear-gradient(90deg, hsl(216 68% 16%), hsl(216 68% 15%))"
               : "hsl(220 16% 90%)",
           }}
         />

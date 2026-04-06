@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Send, ChevronDown, ChevronUp, MessageCircle, HelpCircle } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
-const NAVY   = "hsl(219 65% 17%)";
-const PURPLE = "hsl(252 73% 60%)";
+const NAVY   = "#0D2344";
+const PURPLE = "#0D2344";
 
 const SupportPage = () => {
   const { t, lang } = useI18n();

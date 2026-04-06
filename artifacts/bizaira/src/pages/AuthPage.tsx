@@ -5,8 +5,8 @@ import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const NAVY   = "hsl(219 65% 17%)";
-const PURPLE = "hsl(252 73% 60%)";
+const NAVY   = "#0D2344";
+const PURPLE = "#0D2344";
 
 const AuthPage = () => {
   const { t, lang } = useI18n();
@@ -62,7 +62,7 @@ const AuthPage = () => {
         {/* Logo */}
         <div className="text-center mb-10">
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-            style={{ background: "linear-gradient(135deg, hsl(252 73% 60%), hsl(252 73% 48%))", boxShadow: "0 8px 24px -4px hsl(252 73% 60% / 0.35)" }}>
+            style={{ background: "linear-gradient(135deg, hsl(216 68% 16%), hsl(216 68% 14%))", boxShadow: "0 8px 24px -4px hsl(252 73% 60% / 0.35)" }}>
             <Sparkles size={28} className="text-white" strokeWidth={1.5} />
           </div>
           <h1 className="text-2xl font-black mb-1.5" style={{ color: NAVY }}>

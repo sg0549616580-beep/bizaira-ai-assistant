@@ -71,8 +71,8 @@
   --muted:                 220 18% 95%;
   --muted-foreground:      220 12% 50%;
 
-  /* ── Accent = Lavender Purple ── */
-  --accent:            252 73% 60%;
+  /* ── Accent = Navy Blue #0D2344 ── */
+  --accent:            216 68% 16%;
   --accent-foreground: 0 0% 100%;
 
   /* ── Destructive ── */
@@ -82,21 +82,21 @@
   /* ── Borders / Inputs ── */
   --border: 220 16% 90%;
   --input:  220 16% 90%;
-  --ring:   252 73% 60%;
+  --ring:   216 68% 16%;
 
   /* ── Radius ── */
   --radius: 0.875rem;
 
-  /* ── Gradient vars (purple CTA) ── */
-  --gradient-from: 252 73% 63%;
-  --gradient-to:   252 73% 50%;
+  /* ── Gradient vars (navy CTA #0D2344) ── */
+  --gradient-from: 216 68% 20%;
+  --gradient-to:   216 68% 12%;
 
   /* ── Legacy compat vars ── */
-  --gold:          252 73% 60%;
-  --glow-start:    252 73% 63%;
-  --glow-mid:      252 73% 57%;
-  --glow-end:      252 73% 50%;
-  --gold-sparkle:  252 73% 70%;
+  --gold:          216 68% 16%;
+  --glow-start:    216 68% 20%;
+  --glow-mid:      216 68% 16%;
+  --glow-end:      216 68% 12%;
+  --gold-sparkle:  216 68% 24%;
   --surface-glass: 0 0% 100%;
   --heading-warm:  222 47% 11%;
 
@@ -108,10 +108,10 @@
   --sidebar-accent:              220 18% 95%;
   --sidebar-accent-foreground:   219 65% 17%;
   --sidebar-border:              220 16% 90%;
-  --sidebar-ring:                252 73% 60%;
+  --sidebar-ring:                216 68% 16%;
 
-  --link:       252 73% 50%;
-  --link-hover: 252 73% 40%;
+  --link:       216 68% 16%;
+  --link-hover: 216 68% 12%;
 }
 
 * {
@@ -158,11 +158,11 @@ h1, h2, h3, h4 {
     0 1px 2px -1px hsl(219 65% 17% / 0.04);
 }
 
-/* ── CTA shadow (purple glow) ── */
+/* ── CTA shadow (navy glow) ── */
 .glow-shadow {
   box-shadow:
-    0 4px 22px -4px hsl(252 73% 60% / 0.32),
-    0 2px 10px -2px hsl(252 73% 60% / 0.18);
+    0 4px 22px -4px hsl(216 68% 16% / 0.40),
+    0 2px 10px -2px hsl(216 68% 16% / 0.22);
 }
 
 /* ── Outline button style ── */
@@ -182,11 +182,11 @@ h1, h2, h3, h4 {
 .text-glow {}
 
 .gold-lilac-gradient {
-  background: linear-gradient(135deg, hsl(252 73% 60%), hsl(272 60% 55%), hsl(252 73% 48%));
+  background: linear-gradient(135deg, hsl(216 68% 20%), hsl(219 65% 17%), hsl(216 68% 12%));
 }
 
 .gold-lilac-text {
-  background: linear-gradient(135deg, hsl(252 73% 65%), hsl(272 60% 60%));
+  background: linear-gradient(135deg, hsl(216 68% 24%), hsl(216 68% 16%));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -202,8 +202,8 @@ h1, h2, h3, h4 {
   100% { opacity: 1; transform: translateY(0); }
 }
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 4px 20px -4px hsl(252 73% 60% / 0.20); }
-  50%       { box-shadow: 0 4px 30px -4px hsl(252 73% 60% / 0.38); }
+  0%, 100% { box-shadow: 0 4px 20px -4px hsl(216 68% 16% / 0.22); }
+  50%       { box-shadow: 0 4px 30px -4px hsl(216 68% 16% / 0.40); }
 }
 @keyframes shimmer {
   0%   { background-position: -200% center; }

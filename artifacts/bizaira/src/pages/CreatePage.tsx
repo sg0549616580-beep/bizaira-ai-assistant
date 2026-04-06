@@ -5,8 +5,8 @@ import {
   ChevronLeft, ChevronRight,
 } from "lucide-react";
 
-const NAVY   = "hsl(219 65% 17%)";
-const PURPLE = "hsl(252 73% 60%)";
+const NAVY   = "#0D2344";
+const PURPLE = "#0D2344";
 
 const CreatePage = () => {
   const navigate = useNavigate();

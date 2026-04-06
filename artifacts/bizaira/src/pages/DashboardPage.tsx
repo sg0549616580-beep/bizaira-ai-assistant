@@ -13,9 +13,9 @@ import {
   type Creation, type CreationType,
 } from "@/lib/creations-store";
 
-const NAVY   = "hsl(219 65% 17%)";
-const PURPLE = "hsl(252 73% 60%)";
-const PURPLE_LIGHT = "hsl(252 73% 96%)";
+const NAVY         = "#0D2344";
+const PURPLE       = "#0D2344";
+const PURPLE_LIGHT = "hsl(216 50% 94%)";
 
 const TYPE_ICON: Record<CreationType, React.ComponentType<{ size?: number; strokeWidth?: number; style?: React.CSSProperties }>> = {
   message:   MessageSquare,
