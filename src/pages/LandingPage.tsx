@@ -8,8 +8,10 @@ import AuthSection from "@/components/AuthSection";
 type Step = "onboarding" | "main";
 
 const LandingPage = () => {
+  console.log("[v0] LandingPage rendering");
   const { lang } = useI18n();
   const { user, loading } = useAuth();
+  console.log("[v0] LandingPage - user:", !!user, "loading:", loading);
   const navigate = useNavigate();
 
   const [step, setStep] = useState<Step>("onboarding");

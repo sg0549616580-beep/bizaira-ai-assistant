@@ -318,7 +318,7 @@ const translations: Translations = {
   "feature.studio.1": { he: "בוחרים סוג — תמונת מוצר, לוגו, פרופיל עסקי או סטורי.", en: "Choose type — product photo, logo, business profile or story." },
   "feature.studio.2": { he: "מעלים תמונה או נותנים ל-AI ליצור מאפס.", en: "Upload a photo or let AI create from scratch." },
   "feature.studio.3": { he: "בוחרים סגנון עיצוב וצבע רקע מותאם.", en: "Choose design style and custom background color." },
-  "feature.studio.4": { he: "המערכת יוצרת תמונה מקצועית מוכנה לשיווק.", en: "The system creates a professional marketing-ready image." },
+  "feature.studio.4": { he: "המערכת יוצרת תמונה מקצועי�� מוכנה לשיווק.", en: "The system creates a professional marketing-ready image." },
   "feature.product.title": { he: "תמונות מוצר", en: "Product Photos" },
   "feature.product.1": { he: "מכניסים תמונה לא איכותית של המוצר או רק לוגו.", en: "Upload a low-quality product image or just a logo." },
   "feature.product.2": { he: "בוחרים רקע — סטודיו, יוקרתי, טבעי או מותאם אישית.", en: "Choose background — studio, luxury, natural or custom." },
@@ -422,6 +422,7 @@ const I18nContext = createContext<I18nContextType>({
 });
 
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
+  console.log("[v0] I18nProvider rendering");
   const [lang, setLang] = useState<Lang>("he");
 
   useEffect(() => {

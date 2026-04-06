@@ -34,7 +34,11 @@ import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+console.log("[v0] App.tsx module loaded");
+
+const App = () => {
+  console.log("[v0] App component rendering");
+  return (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <I18nProvider>
@@ -74,6 +78,7 @@ const App = () => (
       </I18nProvider>
     </TooltipProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;
