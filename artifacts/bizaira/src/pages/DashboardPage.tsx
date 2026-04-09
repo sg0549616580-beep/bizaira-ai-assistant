@@ -13,9 +13,9 @@ import {
   type Creation, type CreationType,
 } from "@/lib/creations-store";
 
-const NAVY         = "#0D2344";
-const PURPLE       = "#0D2344";
-const PURPLE_LIGHT = "hsl(216 50% 94%)";
+const NAVY         = "hsl(var(--luxury-navy))";
+const PURPLE       = "hsl(var(--luxury-navy))";
+const PURPLE_LIGHT = "hsl(var(--luxury-gray-100))";
 
 const TYPE_ICON: Record<CreationType, React.ComponentType<{ size?: number; strokeWidth?: number; style?: React.CSSProperties }>> = {
   message:   MessageSquare,
@@ -125,120 +125,145 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="pb-8 max-w-lg mx-auto" dir={isHe ? "rtl" : "ltr"}>
+    <div className="min-h-screen bg-gradient-to-br from-luxury-gray-50 to-luxury-white pb-12" dir={isHe ? "rtl" : "ltr"}>
+      <div className="max-w-4xl mx-auto px-6 pt-12">
 
-      {/* Header */}
-      <div className="px-5 pt-8 mb-6 animate-float-up">
-        <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
-          {isHe ? "שלום," : "Hello,"}
-        </p>
-        <h1 className="text-2xl font-black" style={{ color: NAVY }}>{userName}</h1>
-      </div>
-
-      {/* Tabs */}
-      <div className="px-5 mb-5 animate-float-up" style={{ animationDelay: "40ms" }}>
-        <div className="flex gap-1 p-1 bg-muted rounded-xl">
-          {[
-            { key: "overview", he: "סקירה",                                        en: "Overview"          },
-            { key: "archive",  he: `ארכיון (${creations.length})`, en: `Archive (${creations.length})` },
-          ].map(tab => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key as "overview" | "archive")}
-              className="flex-1 py-2 text-xs font-bold rounded-lg transition-all duration-200"
-              style={{
-                background:  activeTab === tab.key ? "#fff"                        : "transparent",
-                color:       activeTab === tab.key ? NAVY                          : "hsl(220 12% 50%)",
-                boxShadow:   activeTab === tab.key ? "0 1px 4px hsl(0 0% 0% / 0.07)" : "none",
-              }}
-            >
-              {isHe ? tab.he : tab.en}
-            </button>
-          ))}
+        {/* Header */}
+        <div className="mb-16 animate-fade-in">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <p className="luxury-caption mb-2 text-luxury-gray-500">
+                {isHe ? "שלום," : "Welcome back,"}
+              </p>
+              <h1 className="luxury-heading-1 text-luxury-black">
+                {userName}
+              </h1>
+              <p className="luxury-body mt-3 text-luxury-gray-600 max-w-md">
+                {isHe ? "הנה סקירה של הפעילות והיצירות שלך" : "Here's an overview of your activity and creations"}
+              </p>
+            </div>
+            <div className="hidden md:block">
+              <div className="w-24 h-24 luxury-glass rounded-2xl flex items-center justify-center">
+                <Sparkles size={32} className="text-luxury-navy" />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+
+        {/* Tabs */}
+        <div className="mb-12 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          <div className="flex gap-2 p-2 luxury-glass rounded-xl max-w-md">
+            {[
+              { key: "overview", he: "סקירה כללית", en: "Overview" },
+              { key: "archive",  he: `ארכיון (${creations.length})`, en: `Archive (${creations.length})` },
+            ].map(tab => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key as "overview" | "archive")}
+                className={`flex-1 py-3 px-6 luxury-transition rounded-lg luxury-body-small font-medium ${
+                  activeTab === tab.key
+                    ? "luxury-gold-accent text-white shadow-lg"
+                    : "text-luxury-gray-600 hover:text-luxury-black hover:bg-luxury-gray-100"
+                }`}
+              >
+                {isHe ? tab.he : tab.en}
+              </button>
+            ))}
+          </div>
+        </div>
 
       {/* ─── Overview tab ─── */}
       {activeTab === "overview" && (
-        <div className="px-5 space-y-4">
+        <div className="space-y-8">
 
           {/* Credits card */}
-          <div className="glass-card rounded-2xl p-5 space-y-4 animate-float-up" style={{ animationDelay: "60ms" }}>
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-1">
-                  {t("dash.plan")}
-                </p>
-                <div className="flex items-center gap-1.5">
-                  <Sparkles size={13} strokeWidth={1.5} style={{ color: PURPLE }} />
-                  <span className="text-sm font-bold" style={{ color: NAVY }}>Free</span>
+          <div className="luxury-card rounded-xl p-8 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 luxury-glass rounded-lg flex items-center justify-center">
+                    <Sparkles size={20} className="text-luxury-navy" />
+                  </div>
+                  <div>
+                    <p className="luxury-caption text-luxury-gray-500 mb-1">
+                      {t("dash.plan")}
+                    </p>
+                    <p className="luxury-body font-semibold text-luxury-black">
+                      Free Plan
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="luxury-body-small text-luxury-gray-600">{t("dash.credits")}</span>
+                    <span className="luxury-body font-semibold text-luxury-black">{creditsLeft} / {creditsTotal}</span>
+                  </div>
+                  <div className="h-2 bg-luxury-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full luxury-gold-accent rounded-full luxury-transition"
+                      style={{ width: `${creditPct}%` }}
+                    />
+                  </div>
+                  <p className="luxury-caption text-luxury-gray-500">
+                    {creditPct}% {isHe ? "קרדיטים נותרים" : "credits remaining"}
+                  </p>
                 </div>
               </div>
+
               <Link
                 to="/pricing"
-                className="gradient-glow glow-shadow text-white text-xs font-bold px-4 py-2 rounded-xl hover:scale-105 transition-transform"
+                className="luxury-gold-accent text-white px-6 py-3 rounded-lg font-medium hover:shadow-xl luxury-transition luxury-hover-lift"
               >
                 {t("dash.upgrade")}
               </Link>
             </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">{t("dash.credits")}</span>
-                <span className="font-bold" style={{ color: NAVY }}>{creditsLeft} / {creditsTotal}</span>
-              </div>
-              <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-700"
-                  style={{
-                    width: `${creditPct}%`,
-                    background: `linear-gradient(90deg, ${PURPLE}, hsl(252 73% 50%))`,
-                  }}
-                />
-              </div>
-              <p className="text-[11px] text-muted-foreground">
-                {creditPct}% {isHe ? "קרדיטים נותרים" : "credits remaining"}
-              </p>
-            </div>
-
-            <div className="pt-3 border-t border-border space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground flex items-center gap-1.5">
-                  <Calendar size={11} />
+            <div className="border-t border-luxury-gray-200 pt-6 mt-6 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="luxury-body-small text-luxury-gray-600 flex items-center gap-2">
+                  <Calendar size={14} />
                   {isHe ? "שימוש ראשון:" : "First Use:"}
                 </span>
-                <span className="font-semibold" style={{ color: NAVY }}>{formatFirstUseDate()}</span>
+                <span className="luxury-body-small font-medium text-luxury-black">{formatFirstUseDate()}</span>
               </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground flex items-center gap-1.5">
-                  <Calendar size={11} />
+              <div className="flex items-center justify-between">
+                <span className="luxury-body-small text-luxury-gray-600 flex items-center gap-2">
+                  <Calendar size={14} />
                   {isHe ? "חידוש הבא:" : "Next Renewal:"}
                 </span>
-                <span className="font-semibold" style={{ color: NAVY }}>{getNextRenewalDate()}</span>
+                <span className="luxury-body-small font-medium text-luxury-black">{getNextRenewalDate()}</span>
               </div>
             </div>
           </div>
 
           {/* Activity stats */}
-          <div className="glass-card rounded-2xl p-5 animate-float-up" style={{ animationDelay: "100ms" }}>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: PURPLE_LIGHT }}>
-                <TrendingUp size={14} strokeWidth={1.5} style={{ color: PURPLE }} />
+          <div className="luxury-card rounded-xl p-8 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 luxury-glass rounded-lg flex items-center justify-center">
+                <TrendingUp size={20} className="text-luxury-navy" />
               </div>
-              <span className="text-sm font-bold" style={{ color: NAVY }}>{t("dash.activity")}</span>
+              <div>
+                <h3 className="luxury-heading-3 text-luxury-black">{t("dash.activity")}</h3>
+                <p className="luxury-body-small text-luxury-gray-500 mt-1">
+                  {isHe ? "הפעילות שלך החודש" : "Your activity this month"}
+                </p>
+              </div>
             </div>
-            <div className="space-y-3">
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { icon: PenTool,  label: t("dash.creations"),                  val: creationsCount },
-                { icon: Download, label: t("dash.downloads"),                   val: downloadsCount },
-                { icon: Archive,  label: isHe ? "שמורות בארכיון" : "In archive", val: creations.length },
-              ].map(({ icon: Icon, label, val }) => (
-                <div key={label} className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Icon size={14} strokeWidth={1.5} />
-                    {label}
-                  </span>
-                  <span className="text-sm font-bold" style={{ color: NAVY }}>{val}</span>
+                { icon: PenTool,  label: t("dash.creations"), val: creationsCount, desc: isHe ? "יצירות שנוצרו" : "creations made" },
+                { icon: Download, label: t("dash.downloads"),  val: downloadsCount, desc: isHe ? "הורדות" : "downloads" },
+                { icon: Archive,  label: isHe ? "בארכיון" : "In archive", val: creations.length, desc: isHe ? "שמורות" : "saved" },
+              ].map(({ icon: Icon, label, val, desc }) => (
+                <div key={label} className="text-center p-4 luxury-glass rounded-lg">
+                  <div className="w-12 h-12 mx-auto mb-3 luxury-glass rounded-lg flex items-center justify-center">
+                    <Icon size={20} className="text-luxury-navy" />
+                  </div>
+                  <div className="text-2xl font-bold text-luxury-black mb-1">{val}</div>
+                  <div className="luxury-body-small text-luxury-gray-600">{label}</div>
+                  <div className="luxury-caption text-luxury-gray-500 mt-1">{desc}</div>
                 </div>
               ))}
             </div>
@@ -246,36 +271,45 @@ const DashboardPage = () => {
 
           {/* Recent creations preview */}
           {creations.length > 0 && (
-            <div className="animate-float-up" style={{ animationDelay: "140ms" }}>
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-                  {isHe ? "יצירות אחרונות" : "Recent Creations"}
-                </p>
+            <div className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="luxury-heading-3 text-luxury-black">
+                    {isHe ? "יצירות אחרונות" : "Recent Creations"}
+                  </h3>
+                  <p className="luxury-body-small text-luxury-gray-500 mt-1">
+                    {isHe ? "היצירות האחרונות שלך" : "Your latest creations"}
+                  </p>
+                </div>
                 <button
                   onClick={() => setActiveTab("archive")}
-                  className="text-xs font-bold"
-                  style={{ color: PURPLE }}
+                  className="luxury-body-small text-luxury-navy hover:text-luxury-gold font-medium luxury-transition"
                 >
-                  {isHe ? "הצג הכל" : "Show all"}
+                  {isHe ? "צפה בהכל" : "View all"} {Arrow}
                 </button>
               </div>
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {creations.slice(0, 3).map(c => {
                   const IconComp = TYPE_ICON[c.type];
                   return (
-                    <div key={c.id} className="glass-card rounded-xl p-3 flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ background: PURPLE_LIGHT }}>
-                        <IconComp size={14} strokeWidth={1.5} style={{ color: PURPLE }} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
-                            {typeLabel(c.type)}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground">{formatDate(c.createdAt)}</span>
+                    <div key={c.id} className="luxury-card rounded-lg p-4 luxury-hover-lift">
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="w-8 h-8 luxury-glass rounded-lg flex items-center justify-center shrink-0">
+                          <IconComp size={14} className="text-luxury-navy" />
                         </div>
-                        <p className="text-xs text-foreground leading-relaxed line-clamp-2">{c.content}</p>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="luxury-caption text-luxury-gray-500">
+                              {typeLabel(c.type)}
+                            </span>
+                            <span className="luxury-caption text-luxury-gray-400">{formatDate(c.createdAt)}</span>
+                          </div>
+                          <p className="luxury-body-small text-luxury-black font-medium truncate">{c.title}</p>
+                        </div>
                       </div>
+                      <p className="luxury-body-small text-luxury-gray-600 leading-relaxed line-clamp-3">
+                        {c.content}
+                      </p>
                     </div>
                   );
                 })}
@@ -284,24 +318,26 @@ const DashboardPage = () => {
           )}
 
           {/* Quick actions */}
-          <div className="animate-float-up" style={{ animationDelay: "175ms" }}>
-            <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
-              {t("dash.quickActions")}
-            </p>
-            <div className="grid grid-cols-3 gap-3">
+          <div className="animate-fade-in" style={{ animationDelay: "0.5s" }}>
+            <div className="mb-6">
+              <h3 className="luxury-heading-3 text-luxury-black">
+                {t("dash.quickActions")}
+              </h3>
+              <p className="luxury-body-small text-luxury-gray-500 mt-1">
+                {isHe ? "פעולות נפוצות" : "Common actions"}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {quickActions.map(({ to, icon: Icon, label }) => (
                 <Link
                   key={to}
                   to={to}
-                  className="glass-card flex flex-col items-center justify-center p-4 rounded-2xl hover:border-accent/40 hover:scale-[1.03] active:scale-[0.99] transition-all duration-200 group"
+                  className="luxury-card rounded-lg p-6 text-center luxury-hover-lift group"
                 >
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-2 transition-all duration-200 group-hover:scale-110"
-                    style={{ background: PURPLE_LIGHT }}
-                  >
-                    <Icon size={20} strokeWidth={1.5} style={{ color: PURPLE }} />
+                  <div className="w-12 h-12 mx-auto mb-4 luxury-glass rounded-lg flex items-center justify-center group-hover:scale-110 luxury-transition">
+                    <Icon size={20} className="text-luxury-navy" />
                   </div>
-                  <p className="text-xs font-bold text-center leading-tight" style={{ color: NAVY }}>
+                  <p className="luxury-body-small font-medium text-luxury-black">
                     {label}
                   </p>
                 </Link>
@@ -313,89 +349,91 @@ const DashboardPage = () => {
 
       {/* ─── Archive tab ─── */}
       {activeTab === "archive" && (
-        <div className="px-5 space-y-3 animate-fade-in">
+        <div className="space-y-6 animate-fade-in">
           {creations.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="w-16 h-16 rounded-2xl glass-card flex items-center justify-center mb-4">
-                <Archive size={24} className="text-muted-foreground" />
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="w-20 h-20 luxury-glass rounded-2xl flex items-center justify-center mb-6">
+                <Archive size={32} className="text-luxury-gray-400" />
               </div>
-              <p className="text-sm font-bold" style={{ color: NAVY }}>
+              <h3 className="luxury-heading-3 text-luxury-black mb-2">
                 {isHe ? "הארכיון ריק" : "Archive is empty"}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1 max-w-[220px]">
+              </h3>
+              <p className="luxury-body text-luxury-gray-600 mb-8 max-w-md">
                 {isHe
                   ? "כל יצירה שתפיקי תישמר כאן אוטומטית"
                   : "Every creation you make is saved here automatically"}
               </p>
               <Link
                 to="/create"
-                className="mt-5 gradient-glow glow-shadow text-white text-sm font-bold px-6 py-3 rounded-xl"
+                className="luxury-gold-accent text-white px-8 py-4 rounded-lg font-medium hover:shadow-xl luxury-transition luxury-hover-lift"
               >
                 {isHe ? "התחל ליצור" : "Start Creating"}
               </Link>
             </div>
           ) : (
             <>
-              <p className="text-xs text-muted-foreground mb-1">
-                {isHe ? `${creations.length} יצירות שמורות` : `${creations.length} saved creations`}
-              </p>
-              {creations.map(c => {
-                const IconComp = TYPE_ICON[c.type];
-                const isCopied = copiedId === c.id;
-                return (
-                  <div key={c.id} className="glass-card rounded-xl p-4">
-                    <div className="flex items-start gap-3 mb-3">
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: PURPLE_LIGHT }}>
-                        <IconComp size={15} strokeWidth={1.5} style={{ color: PURPLE }} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
-                            {typeLabel(c.type)}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground">{formatDate(c.createdAt)}</span>
+              <div className="mb-6">
+                <p className="luxury-body-small text-luxury-gray-500">
+                  {isHe ? `${creations.length} יצירות שמורות` : `${creations.length} saved creations`}
+                </p>
+              </div>
+              <div className="space-y-4">
+                {creations.map(c => {
+                  const IconComp = TYPE_ICON[c.type];
+                  const isCopied = copiedId === c.id;
+                  return (
+                    <div key={c.id} className="luxury-card rounded-lg p-6">
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="w-10 h-10 luxury-glass rounded-lg flex items-center justify-center shrink-0">
+                          <IconComp size={18} className="text-luxury-navy" />
                         </div>
-                        <p className="text-xs font-bold mt-0.5 truncate" style={{ color: NAVY }}>{c.title}</p>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="luxury-caption text-luxury-gray-500">
+                              {typeLabel(c.type)}
+                            </span>
+                            <span className="luxury-caption text-luxury-gray-400">{formatDate(c.createdAt)}</span>
+                          </div>
+                          <p className="luxury-body font-medium text-luxury-black truncate">{c.title}</p>
+                        </div>
+                      </div>
+
+                      <div className="bg-luxury-gray-50 rounded-lg p-4 mb-4">
+                        <p className="luxury-body-small text-luxury-gray-700 leading-relaxed line-clamp-4 whitespace-pre-wrap">
+                          {c.content}
+                        </p>
+                      </div>
+
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => handleCopyCreation(c)}
+                          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg luxury-body-small font-medium luxury-transition ${
+                            isCopied
+                              ? "bg-green-50 text-green-700 border border-green-200"
+                              : "luxury-glass text-luxury-gray-700 hover:text-luxury-black"
+                          }`}
+                        >
+                          {isCopied
+                            ? <><Check size={14} />{isHe ? "הועתק" : "Copied"}</>
+                            : <><Copy size={14} />{isHe ? "העתק" : "Copy"}</>}
+                        </button>
+                        <button
+                          onClick={() => handleDownloadCreation(c)}
+                          className="flex-1 flex items-center justify-center gap-2 py-3 luxury-glass rounded-lg luxury-body-small font-medium text-luxury-gray-700 hover:text-luxury-black luxury-transition"
+                        >
+                          <Download size={14} />{isHe ? "הורד" : "Download"}
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCreation(c.id)}
+                          className="px-4 py-3 luxury-glass rounded-lg text-red-600 hover:text-red-700 hover:bg-red-50 luxury-transition"
+                        >
+                          <Trash2 size={14} />
+                        </button>
                       </div>
                     </div>
-
-                    <div className="bg-muted rounded-xl p-3 mb-3">
-                      <p className="text-xs text-foreground leading-relaxed line-clamp-4 whitespace-pre-wrap">
-                        {c.content}
-                      </p>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleCopyCreation(c)}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] font-bold transition-all"
-                        style={{
-                          background: isCopied ? "hsl(142 70% 94%)" : "hsl(220 18% 95%)",
-                          color:      isCopied ? "hsl(142 60% 30%)" : NAVY,
-                        }}
-                      >
-                        {isCopied
-                          ? <><Check size={11} />{isHe ? "הועתק" : "Copied"}</>
-                          : <><Copy size={11} />{isHe ? "העתק" : "Copy"}</>}
-                      </button>
-                      <button
-                        onClick={() => handleDownloadCreation(c)}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] font-bold transition-all"
-                        style={{ background: "hsl(220 18% 95%)", color: NAVY }}
-                      >
-                        <Download size={11} />{isHe ? "הורד" : "Download"}
-                      </button>
-                      <button
-                        onClick={() => handleDeleteCreation(c.id)}
-                        className="px-3 py-2 rounded-xl transition-all"
-                        style={{ background: "hsl(0 84% 97%)", color: "hsl(0 84% 50%)" }}
-                      >
-                        <Trash2 size={11} />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </>
           )}
         </div>

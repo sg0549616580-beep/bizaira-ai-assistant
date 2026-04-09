@@ -8,3 +8,39 @@
 export interface HealthStatus {
   status: string;
 }
+
+export type GenerateTextBody = {
+  /** The text prompt for generation */
+  prompt: string;
+  /** Optional system prompt to customize AI behavior */
+  systemPrompt?: string;
+};
+
+export type GenerateText200 = {
+  text: string;
+};
+
+export type GenerateText400 = {
+  error: string;
+};
+
+export type GenerateText500 = {
+  error: string;
+};
+
+export type GenerateImageBody = {
+  /** The image prompt for generation */
+  prompt: string;
+};
+
+export type GenerateImage200 = {
+  imageUrl: string;
+};
+
+export type GenerateImage400 = {
+  error: string;
+};
+
+export type GenerateImage500 = {
+  error: string;
+};

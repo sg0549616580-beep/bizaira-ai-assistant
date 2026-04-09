@@ -6,4 +6,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./generateImage200";
+export * from "./generateImage400";
+export * from "./generateImage500";
+export * from "./generateImageBody";
+export * from "./generateText200";
+export * from "./generateText400";
+export * from "./generateText500";
+export * from "./generateTextBody";
 export * from "./healthStatus";

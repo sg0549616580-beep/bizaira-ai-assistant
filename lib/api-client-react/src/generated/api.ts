@@ -5,18 +5,31 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  GenerateImage200,
+  GenerateImage400,
+  GenerateImage500,
+  GenerateImageBody,
+  GenerateText200,
+  GenerateText400,
+  GenerateText500,
+  GenerateTextBody,
+  HealthStatus,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -99,3 +112,181 @@ export function useHealthCheck<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * Generate AI-powered text content
+ * @summary Generate text content
+ */
+export const getGenerateTextUrl = () => {
+  return `/api/generate/generate-text`;
+};
+
+export const generateText = async (
+  generateTextBody: GenerateTextBody,
+  options?: RequestInit,
+): Promise<GenerateText200> => {
+  return customFetch<GenerateText200>(getGenerateTextUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(generateTextBody),
+  });
+};
+
+export const getGenerateTextMutationOptions = <
+  TError = ErrorType<GenerateText400 | GenerateText500>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof generateText>>,
+    TError,
+    { data: BodyType<GenerateTextBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof generateText>>,
+  TError,
+  { data: BodyType<GenerateTextBody> },
+  TContext
+> => {
+  const mutationKey = ["generateText"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof generateText>>,
+    { data: BodyType<GenerateTextBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return generateText(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type GenerateTextMutationResult = NonNullable<
+  Awaited<ReturnType<typeof generateText>>
+>;
+export type GenerateTextMutationBody = BodyType<GenerateTextBody>;
+export type GenerateTextMutationError = ErrorType<
+  GenerateText400 | GenerateText500
+>;
+
+/**
+ * @summary Generate text content
+ */
+export const useGenerateText = <
+  TError = ErrorType<GenerateText400 | GenerateText500>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof generateText>>,
+    TError,
+    { data: BodyType<GenerateTextBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof generateText>>,
+  TError,
+  { data: BodyType<GenerateTextBody> },
+  TContext
+> => {
+  return useMutation(getGenerateTextMutationOptions(options));
+};
+
+/**
+ * Generate AI-powered image content
+ * @summary Generate image content
+ */
+export const getGenerateImageUrl = () => {
+  return `/api/generate/generate-image`;
+};
+
+export const generateImage = async (
+  generateImageBody: GenerateImageBody,
+  options?: RequestInit,
+): Promise<GenerateImage200> => {
+  return customFetch<GenerateImage200>(getGenerateImageUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(generateImageBody),
+  });
+};
+
+export const getGenerateImageMutationOptions = <
+  TError = ErrorType<GenerateImage400 | GenerateImage500>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof generateImage>>,
+    TError,
+    { data: BodyType<GenerateImageBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof generateImage>>,
+  TError,
+  { data: BodyType<GenerateImageBody> },
+  TContext
+> => {
+  const mutationKey = ["generateImage"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof generateImage>>,
+    { data: BodyType<GenerateImageBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return generateImage(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type GenerateImageMutationResult = NonNullable<
+  Awaited<ReturnType<typeof generateImage>>
+>;
+export type GenerateImageMutationBody = BodyType<GenerateImageBody>;
+export type GenerateImageMutationError = ErrorType<
+  GenerateImage400 | GenerateImage500
+>;
+
+/**
+ * @summary Generate image content
+ */
+export const useGenerateImage = <
+  TError = ErrorType<GenerateImage400 | GenerateImage500>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof generateImage>>,
+    TError,
+    { data: BodyType<GenerateImageBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof generateImage>>,
+  TError,
+  { data: BodyType<GenerateImageBody> },
+  TContext
+> => {
+  return useMutation(getGenerateImageMutationOptions(options));
+};

@@ -14,3 +14,31 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Generate AI-powered text content
+ * @summary Generate text content
+ */
+export const GenerateTextBody = zod.object({
+  prompt: zod.string().describe("The text prompt for generation"),
+  systemPrompt: zod
+    .string()
+    .optional()
+    .describe("Optional system prompt to customize AI behavior"),
+});
+
+export const GenerateTextResponse = zod.object({
+  text: zod.string(),
+});
+
+/**
+ * Generate AI-powered image content
+ * @summary Generate image content
+ */
+export const GenerateImageBody = zod.object({
+  prompt: zod.string().describe("The image prompt for generation"),
+});
+
+export const GenerateImageResponse = zod.object({
+  imageUrl: zod.string(),
+});

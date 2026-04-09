@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
@@ -41,38 +43,40 @@
   --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
   --color-sidebar-ring: hsl(var(--sidebar-ring));
 
-  --font-sans: 'Heebo', sans-serif;
-  --font-heebo: 'Heebo', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-playfair: 'Playfair Display', serif;
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 }
 
 :root {
   /* ── Base ── */
-  --background:    220 25% 97%;
-  --foreground:    222 47% 11%;
+  --background:    220 25% 98%;
+  --foreground:    222 47% 8%;
 
   /* ── Cards / Surfaces ── */
   --card:             0 0% 100%;
-  --card-foreground:  222 47% 11%;
+  --card-foreground:  222 47% 8%;
   --popover:          0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 222 47% 8%;
 
   /* ── Primary = Deep Navy ── */
-  --primary:            219 65% 17%;
+  --primary:            219 65% 12%;
   --primary-foreground: 0 0% 100%;
 
   /* ── Secondary / Muted ── */
-  --secondary:             220 20% 94%;
-  --secondary-foreground:  219 65% 17%;
-  --muted:                 220 18% 95%;
-  --muted-foreground:      220 12% 50%;
+  --secondary:             220 20% 96%;
+  --secondary-foreground:  219 65% 12%;
+  --muted:                 220 18% 97%;
+  --muted-foreground:      220 12% 45%;
 
   /* ── Accent = Navy Blue #0D2344 ── */
-  --accent:            216 68% 16%;
+  --accent:            216 68% 12%;
   --accent-foreground: 0 0% 100%;
 
   /* ── Destructive ── */
@@ -80,24 +84,203 @@
   --destructive-foreground: 0 0% 100%;
 
   /* ── Borders / Inputs ── */
-  --border: 220 16% 90%;
-  --input:  220 16% 90%;
-  --ring:   216 68% 16%;
+  --border: 220 16% 92%;
+  --input:  220 16% 94%;
+  --ring:   216 68% 12%;
 
   /* ── Radius ── */
-  --radius: 0.875rem;
+  --radius: 12px;
 
-  /* ── Gradient vars (navy CTA #0D2344) ── */
-  --gradient-from: 216 68% 20%;
-  --gradient-to:   216 68% 12%;
+  /* ── Luxury Color Palette ── */
+  --luxury-navy: 216 68% 12%;
+  --luxury-gold: 39 100% 56%;
+  --luxury-lilac: 270 30% 65%;
+  --luxury-black: 222 47% 8%;
+  --luxury-white: 0 0% 100%;
+  --luxury-gray-50: 220 25% 98%;
+  --luxury-gray-100: 220 20% 96%;
+  --luxury-gray-200: 220 18% 94%;
+  --luxury-gray-300: 220 16% 92%;
+  --luxury-gray-400: 220 12% 70%;
+  --luxury-gray-500: 220 12% 50%;
+  --luxury-gray-600: 220 12% 35%;
+  --luxury-gray-700: 220 12% 25%;
+  --luxury-gray-800: 220 12% 15%;
+  --luxury-gray-900: 222 47% 8%;
+
+  /* ── Gradient vars ── */
+  --gradient-from: 216 68% 15%;
+  --gradient-to:   216 68% 10%;
+  --gradient-gold: linear-gradient(135deg, hsl(39 100% 56%), hsl(39 90% 52%));
+  --gradient-luxury: linear-gradient(135deg, hsl(216 68% 12%), hsl(270 30% 65%));
+
+  /* ── Glassmorphism ── */
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
   /* ── Legacy compat vars ── */
-  --gold:          216 68% 16%;
-  --glow-start:    216 68% 20%;
-  --glow-mid:      216 68% 16%;
-  --glow-end:      216 68% 12%;
-  --gold-sparkle:  216 68% 24%;
+  --gold:          39 100% 56%;
+  --glow-start:    216 68% 15%;
+  --glow-mid:      216 68% 12%;
+  --glow-end:      216 68% 10%;
+  --gold-sparkle:  39 100% 60%;
   --surface-glass: 0 0% 100%;
+}
+
+/* ── Luxury Design System ── */
+.luxury-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.luxury-card {
+  background: var(--luxury-white);
+  border: 1px solid hsl(var(--luxury-gray-200));
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.luxury-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.luxury-gradient {
+  background: var(--gradient-luxury);
+}
+
+.luxury-gold-accent {
+  background: var(--gradient-gold);
+  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.3);
+}
+
+.luxury-text-primary {
+  color: hsl(var(--luxury-black));
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.luxury-text-secondary {
+  color: hsl(var(--luxury-gray-600));
+  font-weight: 500;
+}
+
+.luxury-text-muted {
+  color: hsl(var(--luxury-gray-500));
+  font-weight: 400;
+}
+
+/* ── Typography Hierarchy ── */
+.luxury-heading-1 {
+  font-family: var(--font-playfair);
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: hsl(var(--luxury-black));
+}
+
+.luxury-heading-2 {
+  font-family: var(--font-playfair);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: hsl(var(--luxury-black));
+}
+
+.luxury-heading-3 {
+  font-family: var(--font-inter);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: hsl(var(--luxury-black));
+}
+
+.luxury-body-large {
+  font-family: var(--font-inter);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: hsl(var(--luxury-gray-700));
+}
+
+.luxury-body {
+  font-family: var(--font-inter);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: hsl(var(--luxury-gray-700));
+}
+
+.luxury-body-small {
+  font-family: var(--font-inter);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: hsl(var(--luxury-gray-600));
+}
+
+.luxury-caption {
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: hsl(var(--luxury-gray-500));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Micro-interactions ── */
+.luxury-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.luxury-hover-lift {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.luxury-hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.luxury-focus-ring {
+  transition: box-shadow 0.2s ease;
+}
+
+.luxury-focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+/* ── Loading States ── */
+.luxury-skeleton {
+  background: linear-gradient(90deg,
+    hsl(var(--luxury-gray-200)) 25%,
+    hsl(var(--luxury-gray-100)) 50%,
+    hsl(var(--luxury-gray-200)) 75%
+  );
+  background-size: 200% 100%;
+  animation: luxury-shimmer 1.5s infinite;
+}
+
+@keyframes luxury-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── Spacing System ── */
+.luxury-spacing-xs { padding: 0.5rem; }
+.luxury-spacing-sm { padding: 1rem; }
+.luxury-spacing-md { padding: 1.5rem; }
+.luxury-spacing-lg { padding: 2rem; }
+.luxury-spacing-xl { padding: 3rem; }
+.luxury-spacing-2xl { padding: 4rem; }
   --heading-warm:  222 47% 11%;
 
   /* ── Sidebar ── */

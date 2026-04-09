@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import {
   Sparkles, ArrowLeft, Check,
   ShoppingBag, Utensils, Star, Home, Monitor, Briefcase,
@@ -19,6 +22,7 @@ const NAVY   = "#0D2344";
 
 const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   const { lang } = useI18n();
+  const { user } = useAuth();
   const isHe = lang === "he";
 
   const [step, setStep]             = useState<Step>("greeting");
@@ -338,7 +342,35 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
                 : "Everything's tailored just for you — smart, precise content for your business. No complications, no waiting."}
             </p>
             <button
-              onClick={onComplete}
+              onClick={async () => {
+                // Save onboarding data
+                const onboardingData = {
+                  business_type: businessType,
+                  target_audience: audience,
+                  business_goals: goal,
+                };
+                
+                if (user) {
+                  // Save to profile if user is logged in
+                  const { error } = await supabase
+                    .from("profiles")
+                    .update({
+                      ...onboardingData,
+                      onboarding_completed: true,
+                    })
+                    .eq("user_id", user.id);
+                  
+                  if (error) {
+                    toast.error(isHe ? "שגיאה בשמירת הנתונים" : "Error saving data");
+                    return;
+                  }
+                } else {
+                  // Store in localStorage for later
+                  localStorage.setItem("bizaira_onboarding", JSON.stringify(onboardingData));
+                }
+                
+                onComplete();
+              }}
               className="w-full py-4 rounded-2xl font-bold text-lg gradient-glow text-white glow-shadow hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
             >
               <Sparkles size={18} />

@@ -140,29 +140,38 @@ const ImageStudioPage = () => {
   };
 
   return (
-    <div className="min-h-screen pb-24 flex flex-col">
-      {/* Header */}
-      <div className="sticky top-0 z-40 glass-card border-b border-border/40 px-4 py-3">
-        <div className="flex items-center justify-between max-w-6xl mx-auto">
-          <div className="flex items-center gap-3">
-            <Link to="/create" className="glass-card p-2 rounded-lg hover:scale-105 transition-all">
-              <BackArrow size={18} className="text-foreground" />
-            </Link>
-            <div>
-              <h1 className="text-base font-bold text-foreground">{isHe ? "סטודיו תמונות" : "Image Studio"}</h1>
-              <p className="text-xs text-muted-foreground">{isHe ? "יצירת תמונות מקצועיות עם AI" : "Create professional images with AI"}</p>
+    <div className="min-h-screen bg-gradient-to-br from-luxury-gray-50 to-luxury-white">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+
+        {/* Header */}
+        <div className="mb-8 animate-fade-in">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link to="/create" className="luxury-glass p-3 rounded-lg hover:bg-luxury-gray-100 luxury-transition">
+                <BackArrow size={20} className="text-luxury-gray-600" />
+              </Link>
+              <div>
+                <h1 className="luxury-heading-2 text-luxury-black">
+                  {isHe ? "סטודיו תמונות" : "Image Studio"}
+                </h1>
+                <p className="luxury-body text-luxury-gray-600 mt-1">
+                  {isHe ? "צור תמונות מקצועיות באמצעות AI" : "Create professional images with AI"}
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {/* Usage counter */}
-            <div className={`glass-card px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 ${isLocked ? "text-red-500" : "text-foreground"}`}>
-              {isLocked ? <Lock size={12} /> : <Sparkles size={12} />}
-              {remaining}/5
+
+            {/* Usage indicator */}
+            <div className="luxury-glass px-4 py-2 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Sparkles size={16} className="text-luxury-navy" />
+                <span className="luxury-body-small text-luxury-gray-600">
+                  {remaining} {isHe ? "תמונות נותרו" : "images left"}
+                </span>
+              </div>
             </div>
-            <SparkleIcon size={18} />
           </div>
         </div>
-      </div>
+
 
       {/* Locked overlay */}
       {isLocked && (
@@ -180,51 +189,94 @@ const ImageStudioPage = () => {
         </div>
       )}
 
-      {!isLocked && (
-        <div className="flex-1 flex flex-col lg:flex-row max-w-6xl mx-auto w-full px-4 pt-4 gap-4">
-          {/* ═══ Preview Area ═══ */}
-          <div className="flex-1 flex flex-col gap-4">
-            <div className="rounded-2xl overflow-hidden shadow-2xl bg-muted/20 border border-border/30 min-h-[320px] flex items-center justify-center relative">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+          {/* Preview Area */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="luxury-card rounded-xl overflow-hidden min-h-[400px] flex items-center justify-center relative">
               {results.length > 0 ? (
                 <img src={results[activeResult]} alt={`Generated ${activeResult + 1}`} className="w-full h-full object-contain max-h-[500px]" />
               ) : uploadedImage ? (
-                <div className="relative w-full h-full min-h-[320px] flex items-center justify-center">
-                  <img src={uploadedImage} alt="Uploaded" className="max-h-[400px] object-contain" />
-                  <button onClick={() => setUploadedImage(null)} className="absolute top-3 end-3 glass-card p-1.5 rounded-lg hover:scale-110 transition-all">
-                    <X size={14} className="text-foreground" />
+                <div className="relative w-full h-full min-h-[400px] flex items-center justify-center">
+                  <img src={uploadedImage} alt="Uploaded" className="max-h-[400px] object-contain rounded-lg" />
+                  <button
+                    onClick={() => setUploadedImage(null)}
+                    className="absolute top-4 right-4 luxury-glass p-2 rounded-lg hover:bg-luxury-gray-100 luxury-transition"
+                  >
+                    <X size={16} className="text-luxury-gray-600" />
                   </button>
                 </div>
               ) : (
-                <div className="text-center py-16 opacity-60">
-                  <div className="w-16 h-16 rounded-2xl glass-card flex items-center justify-center mx-auto mb-4">
-                    <Paintbrush size={28} className="text-muted-foreground" />
+                <div className="text-center py-16">
+                  <div className="w-20 h-20 luxury-glass rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Paintbrush size={32} className="text-luxury-gray-400" />
                   </div>
-                  <p className="text-sm font-bold text-foreground">{isHe ? "התמונות שלך יופיעו כאן" : "Your images will appear here"}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{isHe ? "מלא פרטים ולחץ ׳צור תמונות׳" : "Fill details and click 'Create Images'"}</p>
+                  <h3 className="luxury-heading-3 text-luxury-black mb-2">
+                    {isHe ? "התמונות שלך יופיעו כאן" : "Your images will appear here"}
+                  </h3>
+                  <p className="luxury-body text-luxury-gray-600">
+                    {isHe ? "מלא פרטים ולחץ ׳צור תמונות׳" : "Fill details and click 'Create Images'"}
+                  </p>
                 </div>
               )}
             </div>
 
             {results.length > 1 && (
-              <div className="flex gap-2 justify-center">
+              <div className="flex gap-3 justify-center">
                 {results.map((img, i) => (
-                  <button key={i} onClick={() => setActiveResult(i)} className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${activeResult === i ? "border-primary glow-shadow" : "border-border/30 opacity-60"}`}>
+                  <button
+                    key={i}
+                    onClick={() => setActiveResult(i)}
+                    className={`w-16 h-16 rounded-lg overflow-hidden border-2 luxury-transition hover:scale-105 ${
+                      activeResult === i
+                        ? "border-luxury-gold shadow-lg"
+                        : "border-luxury-gray-200 opacity-60 hover:opacity-100"
+                    }`}
+                  >
                     <img src={img} alt={`V${i + 1}`} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
             )}
 
-            <div className="flex gap-2">
-              <button onClick={handleGenerate} disabled={isGenerating} className="flex-1 gradient-glow glow-shadow text-primary-foreground font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-all disabled:opacity-50">
-                {isGenerating ? <><Loader2 size={18} className="animate-spin" />{isHe ? "יוצר תמונות..." : "Creating..."}</> : <><Sparkles size={18} />{isHe ? "צור תמונות" : "Create Images"}</>}
+            <div className="flex gap-4">
+              <button
+                onClick={handleGenerate}
+                disabled={isGenerating}
+                className="flex-1 luxury-gold-accent text-white font-medium py-4 rounded-lg hover:shadow-xl luxury-transition luxury-hover-lift disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isGenerating ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <Loader2 size={18} className="animate-spin" />
+                    {isHe ? "יוצר תמונות..." : "Creating..."}
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center gap-2">
+                    <Sparkles size={18} />
+                    {isHe ? "צור תמונות" : "Create Images"}
+                  </div>
+                )}
               </button>
               {results.length > 0 && (
-                <button onClick={() => handleDownload(activeResult)} className="glass-card px-4 py-3.5 rounded-xl text-sm font-bold text-foreground flex items-center gap-1.5 hover:scale-[1.02] transition-all">
-                  <Download size={16} />
+                <button
+                  onClick={() => handleDownload(activeResult)}
+                  className="luxury-glass px-6 py-4 rounded-lg text-luxury-gray-700 hover:text-luxury-black luxury-transition"
+                >
+                  <Download size={18} />
                 </button>
               )}
             </div>
+
+            <button
+              onClick={() => fileRef.current?.click()}
+              className="w-full luxury-glass py-4 rounded-lg text-luxury-gray-600 hover:text-luxury-black luxury-transition flex items-center justify-center gap-2"
+            >
+              <Upload size={18} />
+              {isHe ? "העלה תמונת מקור (אופציונלי)" : "Upload reference image (optional)"}
+            </button>
+            <input ref={fileRef} type="file" accept="image/*" onChange={handleUpload} className="hidden" />
+          </div>
 
             <button onClick={() => fileRef.current?.click()} className="w-full glass-card py-3 rounded-xl text-sm font-medium text-muted-foreground flex items-center justify-center gap-2 hover:text-foreground hover:scale-[1.01] transition-all">
               <Upload size={16} />
@@ -233,95 +285,165 @@ const ImageStudioPage = () => {
             <input ref={fileRef} type="file" accept="image/*" onChange={handleUpload} className="hidden" />
           </div>
 
-          {/* ═══ Sidebar Controls ═══ */}
-          <div className="lg:w-80 w-full space-y-4">
-            <div className="flex gap-1 glass-card rounded-xl p-1">
+          {/* Sidebar Controls */}
+          <div className="lg:col-span-1 space-y-6">
+            <div className="flex gap-2 luxury-glass rounded-lg p-1">
               {([
                 { id: "type" as const, icon: ImageIcon, label: isHe ? "סוג" : "Type" },
                 { id: "style" as const, icon: Palette, label: isHe ? "סגנון" : "Style" },
                 { id: "details" as const, icon: Type, label: isHe ? "פרטים" : "Details" },
               ]).map(tab => (
-                <button key={tab.id} onClick={() => setSidebarTab(tab.id)} className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all ${sidebarTab === tab.id ? "gradient-glow text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>
-                  <tab.icon size={14} />
+                <button
+                  key={tab.id}
+                  onClick={() => setSidebarTab(tab.id)}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-lg luxury-body-small font-medium luxury-transition ${
+                    sidebarTab === tab.id
+                      ? "luxury-gold-accent text-white shadow-lg"
+                      : "text-luxury-gray-600 hover:text-luxury-black hover:bg-luxury-gray-100"
+                  }`}
+                >
+                  <tab.icon size={16} />
                   {tab.label}
                 </button>
               ))}
             </div>
 
             {sidebarTab === "type" && (
-              <div className="space-y-4 animate-fade-in-up">
-                <div className="glass-card rounded-xl p-4 space-y-3">
-                  <label className="text-xs font-bold text-foreground">{isHe ? "סוג תמונה" : "Image Type"}</label>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {IMAGE_TYPES.map(it => (
-                      <button key={it.id} onClick={() => setImageType(it.id)} className={`px-2 py-2 rounded-lg text-xs font-medium transition-all ${imageType === it.id ? "gradient-glow text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}>
-                        {isHe ? it.he : it.en}
-                      </button>
-                    ))}
+              <div className="space-y-6 animate-fade-in">
+                <div className="luxury-card rounded-lg p-6 space-y-4">
+                  <div>
+                    <label className="luxury-body-small font-medium text-luxury-black block mb-3">
+                      {isHe ? "סוג תמונה" : "Image Type"}
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {IMAGE_TYPES.map(it => (
+                        <button
+                          key={it.id}
+                          onClick={() => setImageType(it.id)}
+                          className={`p-3 rounded-lg text-center luxury-transition luxury-hover-lift ${
+                            imageType === it.id
+                              ? "luxury-gold-accent text-white"
+                              : "luxury-glass text-luxury-gray-700 hover:text-luxury-black"
+                          }`}
+                        >
+                          <div className="luxury-body-small font-medium">
+                            {isHe ? it.he : it.en}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-                <div className="glass-card rounded-xl p-4 space-y-3">
-                  <label className="text-xs font-bold text-foreground">{isHe ? "יחס תמונה" : "Aspect Ratio"}</label>
-                  <div className="flex gap-1.5">
-                    {RATIOS.map(r => (
-                      <button key={r.id} onClick={() => setRatio(r.id)} className={`flex-1 flex flex-col items-center gap-1 py-2 rounded-lg text-[10px] font-medium transition-all ${ratio === r.id ? "gradient-glow text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}>
-                        <r.icon size={14} />
-                        {r.label}
-                      </button>
-                    ))}
+
+                  <div>
+                    <label className="luxury-body-small font-medium text-luxury-black block mb-3">
+                      {isHe ? "יחס תמונה" : "Aspect Ratio"}
+                    </label>
+                    <div className="flex gap-3">
+                      {RATIOS.map(r => (
+                        <button
+                          key={r.id}
+                          onClick={() => setRatio(r.id)}
+                          className={`flex-1 flex flex-col items-center gap-2 p-3 rounded-lg luxury-transition luxury-hover-lift ${
+                            ratio === r.id
+                              ? "luxury-gold-accent text-white"
+                              : "luxury-glass text-luxury-gray-700 hover:text-luxury-black"
+                          }`}
+                        >
+                          <r.icon size={18} />
+                          <span className="luxury-caption">{r.label}</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
             {sidebarTab === "style" && (
-              <div className="space-y-4 animate-fade-in-up">
-                <div className="glass-card rounded-xl p-4 space-y-3">
-                  <label className="text-xs font-bold text-foreground">{isHe ? "סגנון עיצוב" : "Design Style"}</label>
-                  <div className="grid grid-cols-3 gap-1.5">
-                    {STYLES.map(s => (
-                      <button key={s.id} onClick={() => setStyle(s.id)} className={`px-2 py-1.5 rounded-lg text-xs font-medium transition-all ${style === s.id ? "gradient-glow text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}>
-                        {isHe ? s.he : s.en}
-                      </button>
-                    ))}
+              <div className="space-y-6 animate-fade-in">
+                <div className="luxury-card rounded-lg p-6 space-y-4">
+                  <div>
+                    <label className="luxury-body-small font-medium text-luxury-black block mb-3">
+                      {isHe ? "סגנון עיצוב" : "Design Style"}
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {STYLES.map(s => (
+                        <button
+                          key={s.id}
+                          onClick={() => setStyle(s.id)}
+                          className={`p-3 rounded-lg text-center luxury-transition luxury-hover-lift ${
+                            style === s.id
+                              ? "luxury-gold-accent text-white"
+                              : "luxury-glass text-luxury-gray-700 hover:text-luxury-black"
+                          }`}
+                        >
+                          <div className="luxury-body-small font-medium">
+                            {isHe ? s.he : s.en}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                <div className="glass-card rounded-xl p-4 space-y-3">
-                  <label className="text-xs font-bold text-foreground">{isHe ? "צבע רקע" : "Background Color"}</label>
-                  <div className="flex gap-2 flex-wrap">
-                    {PRESET_COLORS.map(c => (
-                      <button key={c} onClick={() => { setBgColor(c); setCustomColor(c); }} className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${bgColor === c ? "border-primary ring-2 ring-primary/30" : "border-border/50"}`} style={{ background: c }} />
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-2 mt-2">
-                    <label className="text-[10px] text-muted-foreground">{isHe ? "צבע מותאם:" : "Custom:"}</label>
-                    <input type="color" value={customColor} onChange={e => { setCustomColor(e.target.value); setBgColor(e.target.value); }} className="w-8 h-8 rounded-lg border border-border/50 cursor-pointer" />
-                    <span className="text-[10px] text-muted-foreground font-mono">{customColor}</span>
+                  <div>
+                    <label className="luxury-body-small font-medium text-luxury-black block mb-3">
+                      {isHe ? "צבע רקע" : "Background Color"}
+                    </label>
+                    <div className="grid grid-cols-6 gap-2 mb-3">
+                      {PRESET_COLORS.map(color => (
+                        <button
+                          key={color}
+                          onClick={() => setBgColor(color)}
+                          className={`w-8 h-8 rounded-lg border-2 luxury-transition hover:scale-110 ${
+                            bgColor === color ? "border-luxury-gold shadow-lg" : "border-luxury-gray-200"
+                          }`}
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <input
+                        type="color"
+                        value={customColor}
+                        onChange={(e) => {
+                          setCustomColor(e.target.value);
+                          setBgColor(e.target.value);
+                        }}
+                        className="w-12 h-8 rounded-lg border border-luxury-gray-200 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={bgColor}
+                        onChange={(e) => setBgColor(e.target.value)}
+                        placeholder="#ffffff"
+                        className="flex-1 luxury-glass px-3 py-2 rounded-lg luxury-body-small text-luxury-gray-700 placeholder-luxury-gray-400"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {sidebarTab === "details" && (
-              <div className="space-y-4 animate-fade-in-up">
-                <div className="glass-card rounded-xl p-4 space-y-3">
-                  <label className="text-xs font-bold text-foreground">{isHe ? "תיאור התמונה" : "Image Description"}</label>
-                  <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder={isHe ? "תאר את התמונה שתרצה ליצור..." : "Describe the image you want to create..."} rows={5} className="w-full bg-background/50 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-2 focus:ring-ring/50" />
-                </div>
-                <div className="glass-card rounded-xl p-4 space-y-3">
-                  <label className="text-xs font-bold text-foreground">{isHe ? "רעיונות מהירים" : "Quick Ideas"}</label>
-                  <div className="space-y-1.5">
-                    {(isHe ? ["תמונת מוצר על רקע שיש לבן עם צל רך", "לוגו מודרני עם אותיות נקיות", "תמונת פרופיל עסקי עם תאורת סטודיו", "באנר שיווקי עם גרדיאנט מודרני"] : ["Product photo on white marble with soft shadow", "Modern logo with clean typography", "Business profile with studio lighting", "Marketing banner with modern gradient"]).map(idea => (
-                      <button key={idea} onClick={() => setDescription(idea)} className="w-full text-start bg-muted/50 hover:bg-muted rounded-lg px-3 py-2 text-xs text-muted-foreground hover:text-foreground transition-all">{idea}</button>
-                    ))}
+            {sidebarTab === "details" ? (
+              <div className="space-y-6 animate-fade-in">
+                <div className="luxury-card rounded-lg p-6 space-y-4">
+                  <div>
+                    <label className="luxury-body-small font-medium text-luxury-black block mb-3">
+                      {isHe ? "תיאור מפורט" : "Detailed Description"}
+                    </label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder={isHe ? "תאר את התמונה הרצויה..." : "Describe the desired image..."}
+                      rows={4}
+                      className="w-full luxury-glass px-4 py-3 rounded-lg luxury-body-small text-luxury-gray-700 placeholder-luxury-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-luxury-gold/20"
+                    />
                   </div>
                 </div>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
-      )}
     </div>
   );
 };

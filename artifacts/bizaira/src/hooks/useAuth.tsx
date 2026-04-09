@@ -13,9 +13,12 @@ interface AuthContextType {
 }
 
 interface Profile {
-  id: string;
+  user_id: string;
   full_name: string | null;
   business_type: string | null;
+  target_audience: string | null;
+  business_goals: string | null;
+  email: string;
   plan: string;
   credits_total: number;
   credits_used: number;
@@ -43,11 +46,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<Profile | null>(null);
 
   const fetchProfile = async (userId: string) => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("profiles")
       .select("*")
-      .eq("id", userId)
+      .eq("user_id", userId)
       .single();
+
+    if (error && error.code === 'PGRST116') { // No rows returned
+      // Create profile if it doesn't exist
+      const { data: user } = await supabase.auth.getUser();
+      if (user.user) {
+        const onboardingData = localStorage.getItem("bizaira_onboarding");
+        const parsedOnboarding = onboardingData ? JSON.parse(onboardingData) : {};
+        
+        const { data: newProfile, error: insertError } = await supabase
+          .from("profiles")
+          .insert({
+            user_id: userId,
+            email: user.user.email!,
+            full_name: user.user.user_metadata?.full_name || null,
+            ...parsedOnboarding,
+            onboarding_completed: true,
+          })
+          .select()
+          .single();
+
+        if (!insertError && newProfile) {
+          localStorage.removeItem("bizaira_onboarding");
+          setProfile(newProfile as Profile);
+          return;
+        }
+      }
+    }
+
     if (data) setProfile(data as Profile);
   };
 

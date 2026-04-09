@@ -7,14 +7,211 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.4"
-  }
   public: {
     Tables: {
-      [_ in never]: never
+      conversations: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          project_id: string | null
+          response: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          project_id?: string | null
+          response: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          project_id?: string | null
+          response?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          }
+        ]
+      }
+      generated_content: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          metadata: Json | null
+          project_id: string | null
+          prompt: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          metadata?: Json | null
+          project_id?: string | null
+          prompt: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          metadata?: Json | null
+          project_id?: string | null
+          prompt?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_content_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_content_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          }
+        ]
+      }
+      profiles: {
+        Row: {
+          business_goals: string | null
+          business_type: string | null
+          created_at: string
+          credits_total: number
+          credits_used: number
+          email: string
+          full_name: string | null
+          last_renewal_at: string
+          marketing_consent: boolean
+          onboarding_completed: boolean
+          plan: string
+          plan_started_at: string
+          target_audience: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          business_goals?: string | null
+          business_type?: string | null
+          created_at?: string
+          credits_total?: number
+          credits_used?: number
+          email: string
+          full_name?: string | null
+          last_renewal_at?: string
+          marketing_consent?: boolean
+          onboarding_completed?: boolean
+          plan?: string
+          plan_started_at?: string
+          target_audience?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          business_goals?: string | null
+          business_type?: string | null
+          created_at?: string
+          credits_total?: number
+          credits_used?: number
+          email?: string
+          full_name?: string | null
+          last_renewal_at?: string
+          marketing_consent?: boolean
+          onboarding_completed?: boolean
+          plan?: string
+          plan_started_at?: string
+          target_audience?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          status: string
+          title: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string
+          title: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string
+          title?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          }
+        ]
+      }
+      user_roles: {
+        Row: {
+          role: string
+          user_id: string
+        }
+        Insert: {
+          role: string
+          user_id: string
+        }
+        Update: {
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
