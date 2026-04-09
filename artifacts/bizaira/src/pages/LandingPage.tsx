@@ -34,7 +34,7 @@ const LandingPage = () => {
 
   // Main: Hero title + Auth or Welcome
   return (
-    <div className="px-4 pt-8 pb-4 animate-fade-in">
+    <section className="px-4 pt-8 pb-4 animate-fade-in">
       {/* Hero — Elegant centered title with gold/lilac glow */}
       <div className="text-center mb-10 pt-8">
         <h1 
@@ -55,12 +55,13 @@ const LandingPage = () => {
           style={{ 
             background: "linear-gradient(90deg, transparent, hsl(39 48% 56%), hsl(270 30% 65%), transparent)" 
           }}
+          aria-hidden="true"
         />
       </div>
 
       {/* Auth section for non-logged-in users */}
       {!user && (
-        <div className="mb-8">
+        <section className="mb-8">
           <div className="text-center mb-5">
             <h2 className="text-xl font-bold text-foreground mb-1">
               {lang === "he" ? "צרו חשבון והתחילו עכשיו" : "Create an Account & Start Now"}
@@ -77,12 +78,12 @@ const LandingPage = () => {
               {lang === "he" ? "המשך כאורח →" : "Continue as Guest →"}
             </button>
           </div>
-        </div>
+        </section>
       )}
 
       {/* Welcome for logged-in users */}
       {user && (
-        <div className="text-center">
+        <section className="text-center">
           <p className="text-lg text-foreground font-semibold">
             {lang === "he"
               ? `שלום, ${user.user_metadata?.full_name || ""}`
@@ -91,9 +92,9 @@ const LandingPage = () => {
           <p className="text-sm text-muted-foreground mt-1">
             {lang === "he" ? "נווט ליצירה דרך התפריט למטה" : "Navigate to Create from the menu below"}
           </p>
-        </div>
+        </section>
       )}
-    </div>
+    </section>
   );
 };
 

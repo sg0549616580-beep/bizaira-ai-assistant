@@ -126,6 +126,15 @@
   --glow-end:      216 68% 10%;
   --gold-sparkle:  39 100% 60%;
   --surface-glass: 0 0% 100%;
+
+  /* ── Accessibility vars ── */
+  --font-size-multiplier: 1;
+  --line-height-multiplier: 1;
+  --letter-spacing-multiplier: 1;
+  --contrast-mode: normal;
+  --color-mode: normal;
+  --animation-mode: enabled;
+}
 }
 
 /* ── Luxury Design System ── */
@@ -247,6 +256,79 @@
 
 .luxury-hover-lift:hover {
   transform: translateY(-2px);
+}
+
+/* ── Accessibility ── */
+.focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Accessibility Modes ── */
+body {
+  font-size: calc(1rem * var(--font-size-multiplier));
+  line-height: calc(1.6 * var(--line-height-multiplier));
+  letter-spacing: calc(0em * var(--letter-spacing-multiplier));
+}
+
+.accessibility-high-contrast {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --primary: 0 0% 0%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 0 0% 95%;
+  --muted-foreground: 0 0% 0%;
+  --border: 0 0% 0%;
+}
+
+.accessibility-grayscale {
+  filter: grayscale(100%);
+}
+
+.accessibility-highlight-links a {
+  text-decoration: underline !important;
+  text-decoration-color: hsl(var(--primary)) !important;
+  text-decoration-thickness: 2px !important;
+}
+
+.accessibility-readable-font {
+  font-family: 'Arial', sans-serif !important;
+}
+
+.accessibility-stop-animations * {
+  animation: none !important;
+  transition: none !important;
+}
+
+.accessibility-night-mode {
+  --background: 0 0% 10%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 15%;
+  --card-foreground: 0 0% 100%;
+  --muted: 0 0% 20%;
+  --muted-foreground: 0 0% 90%;
 }
 
 .luxury-focus-ring {
