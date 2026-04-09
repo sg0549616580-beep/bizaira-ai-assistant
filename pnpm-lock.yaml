@@ -157,12 +157,18 @@ importers:
 
   .:
     devDependencies:
+      '@vitejs/plugin-react':
+        specifier: 'catalog:'
+        version: 5.1.4(vite@7.3.1(@types/node@25.3.5)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
       prettier:
         specifier: ^3.8.1
         version: 3.8.1
       typescript:
         specifier: ~5.9.2
         version: 5.9.3
+      vite:
+        specifier: 'catalog:'
+        version: 7.3.1(@types/node@25.3.5)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2)
 
   artifacts/api-server:
     dependencies:

@@ -95,7 +95,7 @@ const translations: Translations = {
   "accessibility.statement.contact": { he: "יצירת קשר", en: "Contact Us" },
   "accessibility.statement.contactText": { he: "לשאלות או משוב בנושא נגישות, ניתן לפנות אלינו:", en: "For questions or feedback regarding accessibility, you can contact us:" },
   "accessibility.statement.name": { he: "שם:", en: "Name:" },
-  "accessibility.statement.email": { he: "דוא"ל:", en: "Email:" },
+  "accessibility.statement.email": { he: "דואל:", en: "Email:" },
   "accessibility.statement.phone": { he: "טלפון:", en: "Phone:" },
   "accessibility.statement.update": { he: "עדכון ההצהרה", en: "Statement Update" },
   "accessibility.statement.updateText": { he: "ההצהרה עודכנה לאחרונה בתאריך: 9 באפריל 2026", en: "This statement was last updated on: April 9, 2026" },
@@ -144,7 +144,7 @@ const translations: Translations = {
   "video.businessField.ph": { he: "לדוגמה: עיצוב פנים", en: "Example: Interior Design" },
   "video.slogan": { he: "סלוגן (אופציונלי)", en: "Slogan (optional)" },
   "video.slogan.ph": { he: "לדוגמה: הבית שלך, החלום שלנו", en: "Example: Your Home, Our Dream" },
-  "video.uploadImages": { he: "ה��לה עד 2 תמונות (לוגו + תמונת מוצר)", en: "Upload up to 2 images (logo + product photo)" },
+  "video.uploadImages": { he: "העלה עד 2 תמונות (לוגו + תמונת מוצר)", en: "Upload up to 2 images (logo + product photo)" },
   "video.upload": { he: "העלאה", en: "Upload" },
   "video.textStyle": { he: "סגנון ניסוח", en: "Writing Style" },
   "video.freeText": { he: "טקסט חופשי", en: "Free Text" },
@@ -418,7 +418,7 @@ const translations: Translations = {
   "dash.manageSub": { he: "ניהול מנוי", en: "Manage Subscription" },
   "dash.manageSubDesc": { he: "שדרוג, תשלומים וחשבוניות", en: "Upgrades, payments and invoices" },
   "dash.supportTitle": { he: "תמיכה", en: "Support" },
-  "dash.supportDesc": { he: "צור קשר א�� מצא תשובות", en: "Contact us or find answers" },
+  "dash.supportDesc": { he: "צור קשר או מצא תשובות", en: "Contact us or find answers" },
 
   // Pricing Page
   "pricing.title": { he: "בחר את המסלול שלך", en: "Choose Your Plan" },

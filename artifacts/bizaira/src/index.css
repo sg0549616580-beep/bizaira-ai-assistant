@@ -4,8 +4,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
 @plugin "@tailwindcss/typography";
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -134,7 +132,6 @@
   --contrast-mode: normal;
   --color-mode: normal;
   --animation-mode: enabled;
-}
 }
 
 /* ── Luxury Design System ── */
@@ -363,21 +360,6 @@ body {
 .luxury-spacing-lg { padding: 2rem; }
 .luxury-spacing-xl { padding: 3rem; }
 .luxury-spacing-2xl { padding: 4rem; }
-  --heading-warm:  222 47% 11%;
-
-  /* ── Sidebar ── */
-  --sidebar-background:          220 25% 97%;
-  --sidebar-foreground:          220 12% 50%;
-  --sidebar-primary:             219 65% 17%;
-  --sidebar-primary-foreground:  0 0% 100%;
-  --sidebar-accent:              220 18% 95%;
-  --sidebar-accent-foreground:   219 65% 17%;
-  --sidebar-border:              220 16% 90%;
-  --sidebar-ring:                216 68% 16%;
-
-  --link:       216 68% 16%;
-  --link-hover: 216 68% 12%;
-}
 
 * {
   border-color: hsl(var(--border));
